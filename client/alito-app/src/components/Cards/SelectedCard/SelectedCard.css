@@ -1,0 +1,115 @@
+.page-container{
+    padding: 30px 50px;
+}
+.ad-block{
+    width: 50%;
+    margin-left: 100px;
+}
+.category{
+    cursor: pointer;
+}
+.category:hover{
+    color: #01aafe;
+}
+.title{
+    margin: 5px 0px 15px 0px;
+}
+.button-group{
+    display: flex;
+    gap: 10px;
+}
+.button-group button:hover {
+    background-color: rgb(228, 228, 228);
+    border: none;
+}
+.favorite-button{
+    background-color: rgb(255, 255, 255);
+    border-radius: 5px;
+    color: black;
+    padding: 10px 20px;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+    border: none;
+    cursor: pointer;
+    margin-bottom: 10px;
+}
+
+.edit-button-ad, .delete-button-ad{
+    background-color: rgb(255, 255, 255);
+    border-radius: 5px;
+    padding: 5px 10px;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+    border: none;
+    cursor: pointer;
+    margin-bottom: 10px;
+}
+
+.image-container{
+    width: 480px;
+    height: 480px;
+    background: #f3f3f3;
+ }
+.image{
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+}
+.address-label{
+    margin-bottom: 5px;
+}
+.description-label{
+    margin-bottom: 5px;
+}
+.description{
+    border-bottom: 1px solid #939292;
+    padding-bottom: 30px;
+}
+.details span{
+    color: #939292;
+    font-size: 14px;
+    font-weight: lighter;
+}
+.fast-block {
+    position: fixed;
+    top: 230px; /* расстояние сверху от верхней границы окна браузера */
+    right: 300px; /* расстояние справа от правой границы окна браузера */
+}
+.show-phone-button{
+    display: flex;
+    flex-direction: column;
+    height: 70px;
+    width: 300px;
+    align-items: center;
+    justify-content: space-evenly;
+    background-color: #01aafe;
+    border-radius: 5px;
+    color: #fff;
+    border: none;
+    cursor: pointer;
+    font-size: 16px;
+}
+.show-phone-button:hover {
+    background-color: #2cb2f5;
+}
+.seller-info{
+    margin-top: 15px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.seller-name{
+    color: #01aafe;
+}
+.seller-photo{
+    border-radius: 50%;
+    background-color: #97CA3D;
+    width: 50px;
+    height: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.seller-photo h1{
+    color: white;
+    font-size: 34px;
+    margin: 0;
+}

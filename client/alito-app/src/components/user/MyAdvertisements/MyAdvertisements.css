@@ -1,0 +1,28 @@
+.container{
+    display: flex;
+    flex-direction: column;
+    margin-left: 33%;
+    margin-top: 3%;
+}
+.name-page{
+    margin-left: 25%;
+    margin-bottom: 8px;
+}
+.page-section{
+    display: flex;
+    border-bottom: 1px solid #757575;
+    width: 80%;
+    gap: 20px;
+}
+.sections{
+    cursor: pointer;
+    padding: 5px;
+    margin: 0;
+}
+
+.ads-container{
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
+    margin-top: 40px;
+}

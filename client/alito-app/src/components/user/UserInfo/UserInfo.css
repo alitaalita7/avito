@@ -1,0 +1,39 @@
+.user-info{
+    width: 20%;
+    position: fixed;
+    top: 170px;
+    left: 100px;
+}
+.user-photo{
+    border-radius: 50%;
+    background-color: #97CA3D;
+    width: 100px;
+    height: 100px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.user-photo h1{
+    color: white;
+    font-size: 68px;
+    margin: 0;
+}
+.user-name h2{
+    margin-bottom: 0;
+}
+.review p{
+    font-size: 20px;
+}
+.user-section{
+    display: flex;
+    flex-direction: column;
+}
+a{
+    text-decoration: none;
+    color: #01aafe;
+    font-size: 20px;
+}
+a:hover{
+    color: black;
+}
+

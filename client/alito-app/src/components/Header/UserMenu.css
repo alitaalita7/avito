@@ -1,0 +1,42 @@
+.user-menu {
+  position: absolute;
+  top: 100%; /* Позиционирование меню под кнопкой */
+  right: 10%;
+  background-color: #fff;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.2);
+  padding: 10px;
+  min-width: 150px;
+  z-index: 1;
+  }
+  
+  .user-menu ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+  
+  .user-menu ul li {
+    padding: 5px;
+    border-bottom: 1px solid #ccc;
+  }
+  
+  .user-menu ul li:last-child {
+    border-bottom: none;
+  }
+  
+  .user-menu ul li a {
+    color: black;
+    text-decoration: none;
+    font-size: 16px;
+  }
+  
+  .user-menu ul li a:hover {
+    color: #01aafe;
+  }
+
+  .user-menu ul li p {
+    margin: 0;
+    padding: 0;
+  }

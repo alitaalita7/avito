@@ -1,0 +1,18 @@
+.auto-container{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 100px;
+}
+.auto-button{
+    margin-top: 40px;
+    font-size: 16px;
+}
+.auto-link{
+    margin-top: 50px;
+    font-size: 16px;
+}
+.error{
+    display: none;
+    color: red;
+}

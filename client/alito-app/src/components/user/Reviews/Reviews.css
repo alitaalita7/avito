@@ -1,0 +1,57 @@
+.container{
+    display: flex;
+    flex-direction: column;
+    margin-left: 33%;
+    margin-top: 3%;
+}
+.title-page{
+    margin-left: 30%;
+    margin-bottom: 8px;
+}
+.page-section{
+    display: flex;
+    border-bottom: 1px solid #757575;
+    width: 80%;
+    gap: 20px;
+}
+.sections{
+    cursor: pointer;
+    padding: 5px;
+    margin: 0;
+}
+.reviews-container{
+    margin-bottom: 40px;
+}
+.review-container{
+    width: 80%;
+    border-bottom: 1px solid #757575;
+}
+.review-container:last-child{
+    border: none;
+}
+.from h4{
+    margin-bottom: 0;
+}
+.date p{
+    margin: 0;
+}
+.rating{
+    color: #FFE600;
+    font-weight: bold;
+}
+.ads-title p{
+    margin: 0;
+    font-style: italic;
+}
+.comment h4{
+    margin-bottom: 0;
+}
+.comment p{
+    margin-top: 0;
+}
+/*.ads-container{*/
+/*    display: flex;*/
+/*    flex-wrap: wrap;*/
+/*    gap: 16px;*/
+/*    margin-top: 40px;*/
+/*}*/
