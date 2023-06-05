@@ -16,11 +16,15 @@ public class ReviewService {
     public Map<String, Double> getReviewByAdId(int ad_id){
         String sql = "SELECT user_id FROM advertisements WHERE id= ? LIMIT 1";
         int user_id = jdbcTemplate.queryForObject(sql, Integer.class, ad_id);
+        System.out.println("user = "+ user_id);
         sql = "SELECT COUNT(*) FROM reviews WHERE to_user = ? ";
         double count = jdbcTemplate.queryForObject(sql, Double.class, user_id);
+        System.out.println("count = "+count);
         sql = "SELECT SUM(rating) FROM reviews WHERE to_user= ? ";
         double sum = jdbcTemplate.queryForObject(sql, Double.class, user_id);
+        System.out.println("sum = "+sum);
         double avg = sum/count;
+        System.out.println("avg = "+avg);
         Map<String, Double> map = new HashMap<>();
         map.put("avg", avg);
         map.put("count", count);

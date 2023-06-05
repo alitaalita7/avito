@@ -21,7 +21,15 @@ public class FavoriteService {
         ));
     }
 
-    private boolean isFavoriteExist(int user_id, int ad_id){
+    public List<FavoriteDto> getFavoritesById(int user_id){
+        String sql = "SELECT * FROM favorites where user_id = ?";
+        return jdbcTemplate.query(sql, (rs, rowNum) -> new FavoriteDto(
+                rs.getInt("user_id"),
+                rs.getInt("ad_id")
+        ), user_id);
+    }
+
+    public boolean isFavoriteExist(int user_id, int ad_id){
         String sql = "SELECT COUNT(*) FROM favorites WHERE user_id = ? and ad_id = ?";
         return jdbcTemplate.queryForObject(sql, Integer.class, user_id, ad_id) != 0;
     }
@@ -32,6 +40,12 @@ public class FavoriteService {
                     "VALUES (?, ?)";
             jdbcTemplate.update(sql, data.user_id, data.ad_id);
         }
+    }
+
+    public List<FavoriteDto> deleteFromFavorites(int user_id, int ad_id){
+        String sql= "DELETE FROM favorites where user_id = ? and ad_id = ?";
+        jdbcTemplate.update(sql, user_id, ad_id);
+        return getFavoritesById(user_id);
     }
 
 }

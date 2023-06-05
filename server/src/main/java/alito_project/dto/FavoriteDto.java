@@ -12,7 +12,7 @@ public class FavoriteDto {
     @Override
     public String toString() {
         return "FavoriteDto{" +
-                ", user_id=" + user_id +
+                "user_id=" + user_id +
                 ", ad_id=" + ad_id +
                 '}';
     }
