@@ -5,7 +5,6 @@ import './Card.css'
 const Card = ({id, ad}) => {
 
     const [isFavourite, setIsFavourite] = useState(false);
-    const [favourites, setFavourites] = useState([]);
     const navigate = useNavigate();
     const handleNavigateCard = (e, id) => {
         navigate(`/ad/${id}`)
@@ -19,14 +18,6 @@ const Card = ({id, ad}) => {
     };
     useEffect(() => {
         const userId = JSON.parse(localStorage.getItem("userInfo")).id;
-        fetch(`http://localhost:8080/get-favorites-by-id`, {
-            method: "POST",
-            headers: {"Content-Type": "application/json"},
-            body: JSON.stringify({user_id: userId}),
-        })
-            .then(res => res.json())
-            .then(res => setFavourites(res))
-
         fetch(`http://localhost:8080/is-favorite-exist`, {
             method: "POST",
             headers: {"Content-Type": "application/json"},
@@ -36,7 +27,6 @@ const Card = ({id, ad}) => {
             .then(res=>{
                 if(res==='yes') setIsFavourite(true)
             })
-            .then(res=>console.log(res))
     }, [])
 
     const addToFavorite = (id) => {
@@ -64,7 +54,6 @@ const Card = ({id, ad}) => {
             .then((res) => {
                 setIsFavourite(false);
             })
-            .then((res) => setFavourites(res))
     };
 
     return (

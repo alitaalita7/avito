@@ -4,6 +4,7 @@ import ".//SelectedCard.css"
 import editImage from "../../../image/edit.svg"
 import deleteImage from "../../../image/delete.svg"
 import userInfo from "../../user/UserInfo/UserInfo";
+import card from "../Card/Card";
 const SelectedCard = () => {
     const { id } = useParams();
     const [cardData, setCardData] = useState({});
@@ -45,7 +46,53 @@ const SelectedCard = () => {
         })
             .then(res => res.json())
             .then(res => setUserInfo(res));
+
+        const userId = JSON.parse(localStorage.getItem("userInfo")).id;
+
+        fetch(`http://localhost:8080/is-favorite-exist`, {
+            method: "POST",
+            headers: {"Content-Type": "application/json"},
+            body: JSON.stringify({user_id: userId, ad_id: id}),
+        })
+            .then(res=>res.text())
+            .then(res=>{
+                if(res==='yes') setIsFavourite(true)
+            })
     }, [id]);
+
+    const handleFavourite = () => {
+        if (isFavourite) {
+            removeFromFavorite(cardData.id);
+        } else {
+            addToFavorite(cardData.id);
+        }
+    };
+    const addToFavorite = (id) => {
+        const userId = JSON.parse(localStorage.getItem("userInfo")).id;
+        fetch("http://localhost:8080/add-to-favorite", {
+            method: "POST",
+            headers: {"Content-Type": "application/json"},
+            body: JSON.stringify({user_id: userId, ad_id: id}),
+        })
+            .then((res) => {
+                setIsFavourite(true);
+            })
+            .catch((error) => {
+                console.error("Ошибка при добавлении в избранное:", error);
+            });
+    };
+    const removeFromFavorite = (id) => {
+        const userId = JSON.parse(localStorage.getItem("userInfo")).id;
+        fetch(`http://localhost:8080/delete-from-favorites`, {
+            method: "POST",
+            headers: {"Content-Type": "application/json"},
+            body: JSON.stringify({user_id: userId, ad_id: id}),
+        })
+            .then(res => res.json())
+            .then((res) => {
+                setIsFavourite(false);
+            })
+    };
 
     const navigate = useNavigate();
     const handleNavigateCategory = () => {
@@ -65,8 +112,11 @@ const SelectedCard = () => {
                 <div onClick={handleNavigateCategory} className="category">{cardData.category}</div>
                 <h1 className="title">{cardData.title}</h1>
                 <div className={"button-group"}>
-                    <button onClick={handleFavouriteClick} className="favorite-button">
-                        <span>{isFavourite ? '💙' : '🤍'}</span>Добавить в избранное
+                    <button onClick={handleFavourite} className="favorite-button">
+                        <span>{
+                            isFavourite? '💙' : '🤍'
+                        }</span>
+                        Добавить в избранное
                     </button>
                     {isMyAd()&&
                         <button className={"edit-button-ad"}>

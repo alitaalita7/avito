@@ -5,16 +5,25 @@ import Card from "../../Cards/Card/Card";
 
 const MyAdvertisements = () => {
 
-    const [ads, setAds] = useState([]);
+    const [adsActive, setAdsActive] = useState([]);
+    const [adsArchive, setAdsArchive] = useState([]);
 
     useEffect(() => {
-        fetch("http://localhost:8080/get-advertisements-by-user-id", {
+        fetch("http://localhost:8080/get-advertisements-by-user-id-active", {
             method: "POST",
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({id: JSON.parse(localStorage.getItem("userInfo")).id})
         })
             .then(res => res.json())
-            .then(res => setAds(res))
+            .then(res => setAdsActive(res))
+
+        fetch("http://localhost:8080/get-advertisements-by-user-id-archive", {
+            method: "POST",
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({id: JSON.parse(localStorage.getItem("userInfo")).id})
+        })
+            .then(res => res.json())
+            .then(res => setAdsArchive(res))
     }, [])
 
 
@@ -22,35 +31,39 @@ const MyAdvertisements = () => {
     const styleForSection = {borderBottom: "3px solid black"}
     const pageSections = [
         {
-            text:"Активные",
-            key:"active"
+            text: "Активные",
+            key: "active",
+            ads: adsActive // Массив активных объявлений
         },
         {
-            text:"Архив",
-            key:"archive"
+            text: "Архив",
+            key: "archive",
+            ads: adsArchive // Массив архивных объявлений
         }
     ];
 
     return (
         <>
-            <UserInfo/>
+            <UserInfo />
             <div className={"container"}>
                 <div className={"name-page"}>
                     <h1>Мои объявления</h1>
                 </div>
                 <div className={"page-section"}>
                     {pageSections.map((sec) => (
-                        <h2 key={sec.text}
+                        <h2
+                            key={sec.text}
                             style={sec.key === section ? styleForSection : {}}
                             onClick={() => setSection(sec.key)}
-                            className={"sections"}>
+                            className={"sections"}
+                        >
                             {sec.text}
-                        </h2>)
-                    )}
+                        </h2>
+                    ))}
                 </div>
                 <div className={"ads-container"}>
-                    {ads.map((ad) => (
-                        <Card key={ad.id} ad={ad}/>
+                    {pageSections.find((sec) => sec.key === section)?.ads.map((ad) => (
+                        <Card key={ad.id} ad={ad} />
                     ))}
                 </div>
             </div>
