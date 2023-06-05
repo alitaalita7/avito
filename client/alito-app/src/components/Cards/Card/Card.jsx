@@ -2,43 +2,79 @@ import React, {useEffect, useState} from "react";
 import {useNavigate} from "react-router-dom";
 import './Card.css'
 
-const Card = ({id, ad}) =>{
+const Card = ({id, ad}) => {
 
+    const [isFavourite, setIsFavourite] = useState(false);
+    const [favourites, setFavourites] = useState([]);
     const navigate = useNavigate();
     const handleNavigateCard = (e, id) => {
         navigate(`/ad/${id}`)
     }
-    const [isFavourite, setIsFavourite] = useState(false);
-    const [favorites, setFavorites] = useState([]);
     const handleFavouriteClick = () => {
-        setIsFavourite(!isFavourite);
-        if(!isFavourite){
+        if (isFavourite) {
+            removeFromFavorite(ad.id);
+        } else {
             addToFavorite(ad.id);
         }
     };
-    const addToFavorite =(id)=>{
+    useEffect(() => {
+        const userId = JSON.parse(localStorage.getItem("userInfo")).id;
+        fetch(`http://localhost:8080/get-favorites-by-id`, {
+            method: "POST",
+            headers: {"Content-Type": "application/json"},
+            body: JSON.stringify({user_id: userId}),
+        })
+            .then(res => res.json())
+            .then(res => setFavourites(res))
+
+        fetch(`http://localhost:8080/is-favorite-exist`, {
+            method: "POST",
+            headers: {"Content-Type": "application/json"},
+            body: JSON.stringify({user_id: userId, ad_id: ad.id}),
+        })
+            .then(res=>res.text())
+            .then(res=>{
+                if(res==='yes') setIsFavourite(true)
+            })
+            .then(res=>console.log(res))
+    }, [])
+
+    const addToFavorite = (id) => {
         const userId = JSON.parse(localStorage.getItem("userInfo")).id;
         fetch("http://localhost:8080/add-to-favorite", {
             method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ user_id: userId, ad_id: id }),
+            headers: {"Content-Type": "application/json"},
+            body: JSON.stringify({user_id: userId, ad_id: id}),
         })
-    }
-    useEffect(()=>{
-            fetch("http://localhost:8080/get-all-favorites", {
-            }) .then(res => res.json())
-                .then(res=> setFavorites(res))
-                .then(res=>console.log(res))
-    }, [])
+            .then((res) => {
+                setIsFavourite(true);
+            })
+            .catch((error) => {
+                console.error("Ошибка при добавлении в избранное:", error);
+            });
+    };
+    const removeFromFavorite = (id) => {
+        const userId = JSON.parse(localStorage.getItem("userInfo")).id;
+        fetch(`http://localhost:8080/delete-from-favorites`, {
+            method: "POST",
+            headers: {"Content-Type": "application/json"},
+            body: JSON.stringify({user_id: userId, ad_id: id}),
+        })
+            .then(res => res.json())
+            .then((res) => {
+                setIsFavourite(false);
+            })
+            .then((res) => setFavourites(res))
+    };
 
-    return(
+    return (
         <div className="ad-card" key={ad.id}>
             <img
                 src={ad.photo}
                 alt={ad.title}
                 className="ad-card__image"
                 onClick={(e) => {
-                    handleNavigateCard(e,ad.id)
+                    handleNavigateCard(e, ad.id)
                 }}
                 style={{cursor: "pointer"}}
             />
@@ -47,12 +83,14 @@ const Card = ({id, ad}) =>{
                     <h3
                         className="ad-card__title"
                         onClick={(e) => {
-                            handleNavigateCard(e,ad.id)
+                            handleNavigateCard(e, ad.id)
                         }}
                         style={{cursor: "pointer"}}>{ad.title}
                     </h3>
                     <button onClick={handleFavouriteClick} className='ad-card__favourite'>
-                        <span>{isFavourite ? '💙' : '🤍'}</span>
+                        <span>{
+                            isFavourite? '💙' : '🤍'
+                        }</span>
                     </button>
                 </div>
                 <p className="ad-card__price">{ad.price} Р</p>

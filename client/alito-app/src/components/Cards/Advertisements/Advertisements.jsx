@@ -4,7 +4,9 @@ import './Advertisements.css'
 const Advertisements = ({ads}) => {
     return (
         <div className="ad-container">
-            {ads.map((ad) => (<Card key={ad.id} ad={ad}/>))}
+            {ads.map((ad) => (<Card key={ad.id}
+                                    ad={ad}
+                                    />))}
         </div>
     )
 }
