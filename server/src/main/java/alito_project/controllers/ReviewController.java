@@ -34,4 +34,20 @@ public class ReviewController {
         Map<String, Double> map2 = reviewService.getReviewByUserId(map.get("id"));
         return ResponseEntity.ok().body(map2);
     }
+
+    @PostMapping("/get-received-reviews")
+    public ResponseEntity getReceivedReviews(@RequestBody Map<String, Integer> map){
+        if(map.containsKey("id")){
+            return ResponseEntity.ok().body(reviewService.getReceivedReviews(map.get("id")));
+        }
+        else return ResponseEntity.badRequest().body("IllegalArgumentException");
+    }
+
+    @PostMapping("/get-sent-reviews")
+    public ResponseEntity getSentReviews(@RequestBody Map<String, Integer> map){
+        if(map.containsKey("id")){
+            return ResponseEntity.ok().body(reviewService.getSentReviews(map.get("id")));
+        }
+        else return ResponseEntity.badRequest().body("IllegalArgumentException");
+    }
 }

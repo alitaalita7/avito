@@ -28,12 +28,20 @@ public class AdvertisementController {
         }
         return ResponseEntity.ok().body(advertisementService.getAdvertisementById(map.get("id")));
     }
-    @PostMapping("/get-advertisements-by-user-id")
-    public ResponseEntity getAdvertisementsByUserId(@RequestBody Map<String, Integer> map) {
+    @PostMapping("/get-advertisements-by-user-id-active")
+    public ResponseEntity getAdvertisementsByUserIdActive(@RequestBody Map<String, Integer> map) {
         if (!map.containsKey("id")) {
             return ResponseEntity.badRequest().body("IllegalArgumentException");
         }
-        List<AdvertisementDto> advertisements = advertisementService.getAdvertisementsByUserId(map.get("id"));
+        List<AdvertisementDto> advertisements = advertisementService.getAdvertisementsByUserIdActive(map.get("id"));
+        return ResponseEntity.ok().body(advertisements);
+    }
+    @PostMapping("/get-advertisements-by-user-id-archive")
+    public ResponseEntity getAdvertisementsByUserIdArchive(@RequestBody Map<String, Integer> map) {
+        if (!map.containsKey("id")) {
+            return ResponseEntity.badRequest().body("IllegalArgumentException");
+        }
+        List<AdvertisementDto> advertisements = advertisementService.getAdvertisementsByUserIdArchive(map.get("id"));
         return ResponseEntity.ok().body(advertisements);
     }
     @PostMapping("/get-favorite-advertisements")

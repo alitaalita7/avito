@@ -62,8 +62,29 @@ public class AdvertisementService {
         );
     }
 
-    public List<AdvertisementDto> getAdvertisementsByUserId(int id) {
-        String sql = "SELECT * FROM advertisements WHERE user_id=?";
+    public List<AdvertisementDto> getAdvertisementsByUserIdActive(int id) {
+        String sql = "SELECT * FROM advertisements WHERE user_id=? and status = 'active'";
+        List<AdvertisementDto> list = new ArrayList<>();
+        list = jdbcTemplate.query(sql, (rs, rowNum) -> new AdvertisementDto(
+                rs.getInt("id"),
+                rs.getString("title"),
+                rs.getString("description"),
+                rs.getInt("price"),
+                rs.getString("date_created"),
+                rs.getString("status"),
+                rs.getString("category"),
+                rs.getString("city"),
+                rs.getString("district"),
+                rs.getString("street"),
+                rs.getString("house"),
+                rs.getString("photo"),
+                rs.getInt("user_id")
+        ), id);
+        return list;
+    }
+
+    public List<AdvertisementDto> getAdvertisementsByUserIdArchive(int id) {
+        String sql = "SELECT * FROM advertisements WHERE user_id=? and status = 'archive'";
         List<AdvertisementDto> list = new ArrayList<>();
         list = jdbcTemplate.query(sql, (rs, rowNum) -> new AdvertisementDto(
                 rs.getInt("id"),
