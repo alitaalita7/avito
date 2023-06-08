@@ -95,6 +95,7 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
+    cursor: pointer;
 }
 .seller-name{
     color: #01aafe;

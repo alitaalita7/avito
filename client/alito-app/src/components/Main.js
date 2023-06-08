@@ -18,12 +18,14 @@ function Main() {
     const [selectedCategory, setSelectedCategory] = useState('');
 
     const filteredAds = ads.filter((ad) => {
+        console.log(ad.category)
         const adTitle = ad.title.toLowerCase();
         const categoryTitle = selectedCategory.toLowerCase();
         return (
             adTitle.includes(searchText.toLowerCase()) &&
             (selectedCategory === '' || ad.category.toLowerCase() === categoryTitle)
         );
+
     });
 
     return (

@@ -2,8 +2,11 @@ import React, {useEffect, useState} from "react";
 import UserInfo from "../UserInfo/UserInfo";
 import "./Reviews.css"
 import Card from "../../Cards/Card/Card";
+import {useParams} from "react-router-dom";
 
 const Reviews = () => {
+
+    const {id} = useParams();
 
     const [receivedReviews, setReceivedReviews] = useState([])
     const [sentReviews, setSentReviews] = useState([])
@@ -12,7 +15,7 @@ const Reviews = () => {
         fetch("http://localhost:8080/get-received-reviews", {
             method: "POST",
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({id: JSON.parse(localStorage.getItem("userInfo")).id})
+            body: JSON.stringify({id: id})
         })
             .then(res=>res.json())
             .then(res=>setReceivedReviews(res))
@@ -20,49 +23,11 @@ const Reviews = () => {
         fetch("http://localhost:8080/get-sent-reviews", {
             method: "POST",
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({id: JSON.parse(localStorage.getItem("userInfo")).id})
+            body: JSON.stringify({id: id})
         })
             .then(res=>res.json())
             .then(res=>setSentReviews(res))
     },[])
-
-    // const reviews = [
-    //     {
-    //         id: 1,
-    //         from: "Alina Sharapova",
-    //         to: "John Doe",
-    //         date: "Май 10, 2023",
-    //         rating: 5,
-    //         ads_title: "Название объявления",
-    //         text: "Хороший продавец, будем еще с ним сотрудничать, товары без брака."
-    //     },
-    //     {
-    //         id: 2,
-    //         from: "Alina Sharapova",
-    //         to: "John Doe",
-    //         date: "Май 10, 2023",
-    //         rating: 2,
-    //         ads_title: "Название объявления",
-    //         text: "Хороший продавец, будем еще с ним сотрудничать, товары без брака."
-    //     },
-    //     {
-    //         id:3,
-    //         from:"Alina Sharapova",
-    //         to:"John Doe",
-    //         date:"Май 10, 2023",
-    //         rating: 5,
-    //         ads_title: "Название объявления",
-    //         text: "Хороший продавец, будем еще с ним сотрудничать, товары без брака."
-    //     },
-    //     {
-    //         id:4,
-    //         from:"Alina Sharapova",
-    //         to:"John Doe",
-    //         date:"Май 10, 2023",
-    //         rating: 4,
-    //         ads_title: "Название объявления",
-    //         text: "Хороший продавец, будем еще с ним сотрудничать, товары без брака."
-    //     }]
 
     const [section, setSection] = useState("received");
     const styleForSection = {borderBottom: "3px solid black"}

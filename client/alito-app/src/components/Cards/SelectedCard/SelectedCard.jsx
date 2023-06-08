@@ -105,6 +105,13 @@ const SelectedCard = () => {
         }
         else return false
     }
+    const handleNavigateToEdit = () =>{
+        navigate("/edit-advertisements/" + cardData?.id)
+    }
+
+    const handleNavigateProfile = () => {
+        navigate("/profile/" + userInfo.id + '/ads')
+    }
 
     return (
         <div className="page-container">
@@ -119,7 +126,7 @@ const SelectedCard = () => {
                         Добавить в избранное
                     </button>
                     {isMyAd()&&
-                        <button className={"edit-button-ad"}>
+                        <button className={"edit-button-ad"}  onClick={handleNavigateToEdit} >
                             <img src={editImage}/>
                         </button>}
                     {isMyAd()&&
@@ -152,7 +159,7 @@ const SelectedCard = () => {
                     <span>Показать телефон</span>
                     <span>{showFullPhone ? userInfo.phone : '+7 ХХХ XXX XX XX'}</span>
                 </button>
-                <div className="seller-info">
+                <div className="seller-info" onClick={handleNavigateProfile}>
                     <div>
                         <div className="seller-name">{userInfo.name}</div>
                         <div className="seller-description">

@@ -1,10 +1,12 @@
 import React, {useEffect, useState} from "react";
 import UserInfo from "../UserInfo/UserInfo";
-import "./MyAdvertisements.css"
+import "./UserAdvertisements.css"
 import Card from "../../Cards/Card/Card";
+import {useParams} from "react-router-dom";
 
-const MyAdvertisements = () => {
+const UserAdvertisements = () => {
 
+    const {id} = useParams()
     const [adsActive, setAdsActive] = useState([]);
     const [adsArchive, setAdsArchive] = useState([]);
 
@@ -12,7 +14,7 @@ const MyAdvertisements = () => {
         fetch("http://localhost:8080/get-advertisements-by-user-id-active", {
             method: "POST",
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({id: JSON.parse(localStorage.getItem("userInfo")).id})
+            body: JSON.stringify({id: id})
         })
             .then(res => res.json())
             .then(res => setAdsActive(res))
@@ -20,7 +22,7 @@ const MyAdvertisements = () => {
         fetch("http://localhost:8080/get-advertisements-by-user-id-archive", {
             method: "POST",
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({id: JSON.parse(localStorage.getItem("userInfo")).id})
+            body: JSON.stringify({id: id})
         })
             .then(res => res.json())
             .then(res => setAdsArchive(res))
@@ -47,7 +49,7 @@ const MyAdvertisements = () => {
             <UserInfo />
             <div className={"container"}>
                 <div className={"name-page"}>
-                    <h1>Мои объявления</h1>
+                    <h1>Объявления</h1>
                 </div>
                 <div className={"page-section"}>
                     {pageSections.map((sec) => (
@@ -70,4 +72,4 @@ const MyAdvertisements = () => {
         </>
     )
 }
-export default MyAdvertisements
+export default UserAdvertisements

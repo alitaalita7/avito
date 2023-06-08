@@ -1,0 +1,22 @@
+.title-edit-card{
+    display: flex;
+    justify-content: center;
+}
+.edit{
+    margin-left: 40px;
+    display: flex;
+    align-items: center;
+    gap: 40px;
+}
+.button-confirm{
+    background-color: #01aafe;
+    border-radius: 5px;
+    color: #fff;
+    padding: 10px 20px;
+    border: none;
+    cursor: pointer;
+    margin-left: 45%;
+}
+.button-confirm:hover {
+    background-color: #2cb2f5;
+}

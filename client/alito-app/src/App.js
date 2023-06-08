@@ -4,12 +4,13 @@ import {Route, Routes} from 'react-router-dom';
 import Main from './components/Main'
 import NewAd from './components/AddAdvertisement/NewAd'
 import SelectedCard from "./components/Cards/SelectedCard/SelectedCard";
-import MyAdvertisements from "./components/user/MyAdvertisements/MyAdvertisements";
+import UserAdvertisements from "./components/user/UserAdvertisements/UserAdvertisements";
 import Reviews from "./components/user/Reviews/Reviews";
 import Favorites from "./components/user/Favorites/Favorites";
 import SettingsProfile from "./components/user/SettingsProfile/SettingsProfile";
 import LogIn from "./components/ Authorization/LogIn/LogIn";
 import SignUp from "./components/ Authorization/SignUp/SignUp";
+import EditCard from "./components/Cards/EditCard/EditCard";
 
 function App() {
 
@@ -26,12 +27,15 @@ function App() {
                 <Route path='/' element={[<Main key={1}/>]}/>
                 <Route path='/new-addvertisements' element={<NewAd/>}/>
                 <Route path='/ad/:id' element={<SelectedCard/>}/>
-                <Route path='/my-ads' element={<MyAdvertisements/>}/>
-                <Route path={'/reviews'} element={<Reviews/>}/>
-                <Route path={'/favorites'} element={<Favorites/>}/>
-                <Route path={'/settings'} element={<SettingsProfile/>}/>
+                <Route path='/my-ads' element={<UserAdvertisements/>}/>
+                <Route path={'/profile/:id/reviews'} element={<Reviews/>}/>
+                <Route path={'/profile/:id/favorites'} element={<Favorites/>}/>
+                <Route path={'/profile/:id/settings'} element={<SettingsProfile/>}/>
                 <Route path={'/login'} element={<LogIn setIsLogIn={setIsLogIn}/>}/>
                 <Route path={'/signup'} element={<SignUp setIsLogIn={setIsLogIn}/>}/>
+                <Route path={'/edit-advertisements/:id'} element={<EditCard/>}/>
+                <Route path={'/profile/:id/ads'} element={<UserAdvertisements/>}/>
+                <Route path={'/add-review'}></Route>
             </Routes>
         </div>
     );
