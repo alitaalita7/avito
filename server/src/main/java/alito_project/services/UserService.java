@@ -67,4 +67,22 @@ public class UserService {
                 rs.getBoolean("is_blocked")
         ), ad_id).get(0);
     }
+
+    public UserDto getUserInfoById(int user_id){
+        String sql = "SELECT * FROM users WHERE id = ?";
+        return jdbcTemplate.query(sql, (rs, rowNum) -> new UserDto(
+                rs.getInt("id"),
+                rs.getString("name"),
+                rs.getString("surname"),
+                rs.getString("phone"),
+                rs.getString("password"),
+                rs.getBoolean("is_admin"),
+                rs.getBoolean("is_blocked")
+        ), user_id).get(0);
+    }
+
+    public void editUser(int user_id, String column, String value){
+        String sql = "UPDATE users SET " + column + " = '" + value + "' WHERE id = ?";
+        jdbcTemplate.update(sql, user_id);
+    }
 }

@@ -128,5 +128,9 @@ public class AdvertisementService {
         return list;
     }
 
+    public void editAdvertisement(int ad_id, String column, String value){
+        String sql = "UPDATE advertisements SET " + column + " = '" + value + "' WHERE id = ?";
+        jdbcTemplate.update(sql, ad_id);
+    }
 
 }

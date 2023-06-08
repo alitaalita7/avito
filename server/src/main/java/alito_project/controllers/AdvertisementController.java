@@ -75,4 +75,13 @@ public class AdvertisementController {
         return ResponseEntity.ok().build();
     }
 
+    @PostMapping("/edit-ad")
+    public ResponseEntity editAdvertisement(@RequestBody Map<String, String> map){
+        if(!map.containsKey("ad_id") || !map.containsKey("column") || !map.containsKey("value")){
+            return ResponseEntity.badRequest().body("IllegalArgumentException");
+        }
+        int ad_id = Integer.parseInt(map.get("ad_id"));
+        advertisementService.editAdvertisement(ad_id, map.get("column"), map.get("value"));
+        return ResponseEntity.ok().body("ok");
+    }
 }

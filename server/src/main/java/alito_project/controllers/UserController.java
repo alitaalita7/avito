@@ -51,4 +51,22 @@ public class UserController {
         return ResponseEntity.ok().body(userService.getUserInfoByAd(map.get("id")));
     }
 
+    @PostMapping("/get-user-info-by-id")
+    public ResponseEntity getUserInfoById (@RequestBody Map<String, Integer> map){
+        if (!map.containsKey("user_id")){
+            return ResponseEntity.badRequest().body("IllegalArgumentException");
+        }
+        return ResponseEntity.ok().body(userService.getUserInfoByAd(map.get("user_id")));
+    }
+
+    @PostMapping("/edit-user")
+    public ResponseEntity editUser(@RequestBody Map<String, String> map){
+        if(!map.containsKey("user_id") || !map.containsKey("column") || !map.containsKey("value")){
+            return ResponseEntity.badRequest().body("IllegalArgumentException");
+        }
+        int user_id = Integer.parseInt(map.get("user_id"));
+        userService.editUser(user_id, map.get("column"), map.get("value"));
+        return ResponseEntity.ok().body("ok");
+    }
+
 }
