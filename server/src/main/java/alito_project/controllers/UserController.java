@@ -56,7 +56,7 @@ public class UserController {
         if (!map.containsKey("user_id")){
             return ResponseEntity.badRequest().body("IllegalArgumentException");
         }
-        return ResponseEntity.ok().body(userService.getUserInfoByAd(map.get("user_id")));
+        return ResponseEntity.ok().body(userService.getUserInfoById(map.get("user_id")));
     }
 
     @PostMapping("/edit-user")
