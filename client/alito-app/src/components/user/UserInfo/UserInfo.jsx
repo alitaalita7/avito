@@ -51,7 +51,7 @@ const UserInfo = () => {
                         <Link to={"/profile/" + user?.id + "/settings"} style={pathname === "/profile/" + user?.id + "/settings" ? styleActiveLink : {}}>Настройки профиля</Link>
                     </>
                     :
-                    <Link to={"/add-review"} style={pathname === "/add-review" ? styleActiveLink : {}}>Оставить отзыв</Link>
+                    <Link to={"/profile/" + user?.id + "/add-review"} style={pathname === "/profile/" + user?.id +  "/add-review" ? styleActiveLink : {}}>Оставить отзыв</Link>
                 }
             </div>
         </div>

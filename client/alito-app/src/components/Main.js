@@ -10,15 +10,20 @@ function Main() {
     const [ads, setAds] = useState([]);
 
     useEffect(() => {
-        fetch("http://localhost:8080/get-all-advertisements", {})
+        fetch("http://localhost:8080/get-all-advertisements", {
+            method: "POST",
+            headers: {"Content-Type": "application/json"},
+            body: JSON.stringify({user_id: JSON.parse(localStorage.getItem("userInfo")).id})
+        })
             .then(res => res.json())
-            .then(res => setAds(res))
+            .then(res => {
+                setAds(res)
+            })
     }, [])
 
     const [selectedCategory, setSelectedCategory] = useState('');
 
     const filteredAds = ads.filter((ad) => {
-        console.log(ad.category)
         const adTitle = ad.title.toLowerCase();
         const categoryTitle = selectedCategory.toLowerCase();
         return (

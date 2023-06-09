@@ -14,7 +14,7 @@ const UserAdvertisements = () => {
         fetch("http://localhost:8080/get-advertisements-by-user-id-active", {
             method: "POST",
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({id: id})
+            body: JSON.stringify({user_id: id})
         })
             .then(res => res.json())
             .then(res => setAdsActive(res))
@@ -22,7 +22,7 @@ const UserAdvertisements = () => {
         fetch("http://localhost:8080/get-advertisements-by-user-id-archive", {
             method: "POST",
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({id: id})
+            body: JSON.stringify({user_id: id})
         })
             .then(res => res.json())
             .then(res => setAdsArchive(res))

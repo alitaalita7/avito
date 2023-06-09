@@ -96,7 +96,9 @@ const SelectedCard = () => {
 
     const navigate = useNavigate();
     const handleNavigateCategory = () => {
-        navigate("/категория");
+        navigate("/", {
+            state:{category: cardData.category}
+        });
     };
     const isMyAd =()=>{
         const user = JSON.parse(localStorage.getItem("userInfo")).id

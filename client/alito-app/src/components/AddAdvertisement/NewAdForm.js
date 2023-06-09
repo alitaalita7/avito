@@ -45,7 +45,7 @@ const NewAdForm = ({categories}) => {
     return (
         <form onSubmit={handleSubmit}>
             <div className={"input-block"}>
-                <label htmlFor="title">Название объявления:</label>
+                <label htmlFor="title">Название:</label>
                 <input id="title" type="text" value={title} onChange={handleTitleChange} required/>
             </div>
             <div className={"input-block"}>

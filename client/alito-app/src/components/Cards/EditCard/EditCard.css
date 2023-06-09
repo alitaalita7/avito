@@ -1,12 +1,19 @@
-.title-edit-card{
+.edit-container{
     display: flex;
-    justify-content: center;
+    flex-direction: column;
+    align-items: center;
 }
 .edit{
-    margin-left: 40px;
-    display: flex;
+    display: grid;
+    grid-template-columns: 150px 1fr;
+    grid-gap: 10px;
     align-items: center;
-    gap: 40px;
+}
+.edit p{
+    font-weight: 500;
+}
+.edit input::placeholder{
+    color: black;
 }
 .button-confirm{
     background-color: #01aafe;
@@ -15,7 +22,7 @@
     padding: 10px 20px;
     border: none;
     cursor: pointer;
-    margin-left: 45%;
+    margin-top: 10px;
 }
 .button-confirm:hover {
     background-color: #2cb2f5;

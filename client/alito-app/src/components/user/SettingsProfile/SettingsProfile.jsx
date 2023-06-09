@@ -71,38 +71,35 @@ const SettingsProfile = () => {
                 <div className={"set-container"}>
                     <div className={"set"}>
                         <p>Имя:</p>
-                        {editName ? (<input className={"set-input"}
-                                            type="text"
-                                            name={"name"}
-                                            onClick={handleNameChange}
-                                            onKeyDown={handleKeyDown}
-                                    />)
-                                : (<p className={"value"}>{user.name}</p>)}
-                        <img src={myImage} alt="My Image" onClick={handleEditName}/>
+                        <input className="set-input"
+                               type="text"
+                               name={"name"}
+                               placeholder={user.name}
+                        />
                     </div>
                     <div className={"set"}>
                         <p>Фамилия:</p>
-                        {editSurname ? (<input className={"set-input"}
-                                               type="text"
-                                               name={"surname"}
-                                               onClick={handleSurnameChange}
-                                               onKeyDown={handleKeyDown}
-                                        />)
-                                    : (<p className={"value"}>{user.surname}</p>)}
-                        <img src={myImage} alt="My Image" onClick={handleEditSurname}/>
+                        <input className="set-input"
+                               type="text"
+                               name={"surname"}
+                               placeholder={user.surname}
+                        />
                     </div>
                     <div className={"set"}>
                         <p>Телефон:</p>
-                        {editNumber ? (<input className={"set-input"}
-                                              type="text"
-                                              name={"phone"}
-                                              onClick={handleNumberChange}
-                                              onKeyDown={handleKeyDown}
-                                    />)
-                                    : (<p className={"value"}>{user.phone}</p>)}
-                        <img src={myImage} alt="My Image" onClick={handleEditNumber}/>
+                        <input className="set-input"
+                               type="text"
+                               name={"phone"}
+                               placeholder={user.phone}
+                        />
                     </div>
                     <div className={"set"}>
+                        <p>Пароль:</p>
+                        <input className="set-input"
+                               type="password"
+                               name={"password"}
+                               placeholder={user.phone}
+                        />
                         <p>Пароль:</p>
                         {editPassword ? (<input className={"set-input"}
                                                 type="password"

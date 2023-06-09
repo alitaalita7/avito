@@ -11,10 +11,13 @@ const Favorites=()=>{
         fetch("http://localhost:8080/get-favorite-advertisements", {
             method: "POST",
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({id: JSON.parse(localStorage.getItem("userInfo")).id})
+            body: JSON.stringify({user_id: JSON.parse(localStorage.getItem("userInfo")).id})
         })
             .then(res => res.json())
-            .then(res => setAds(res))
+            .then(res => {
+                setAds(res)
+                console.log(res)
+            })
     }, [])
 
     return(

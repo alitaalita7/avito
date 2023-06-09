@@ -4,7 +4,7 @@ import './Card.css'
 
 const Card = ({id, ad}) => {
 
-    const [isFavourite, setIsFavourite] = useState(false);
+    const [isFavourite, setIsFavourite] = useState(ad.isLike);
     const navigate = useNavigate();
     const handleNavigateCard = (e, id) => {
         navigate(`/ad/${id}`)
@@ -16,18 +16,6 @@ const Card = ({id, ad}) => {
             addToFavorite(ad.id);
         }
     };
-    useEffect(() => {
-        const userId = JSON.parse(localStorage.getItem("userInfo")).id;
-        fetch(`http://localhost:8080/is-favorite-exist`, {
-            method: "POST",
-            headers: {"Content-Type": "application/json"},
-            body: JSON.stringify({user_id: userId, ad_id: ad.id}),
-        })
-            .then(res=>res.text())
-            .then(res=>{
-                if(res==='yes') setIsFavourite(true)
-            })
-    }, [])
 
     const addToFavorite = (id) => {
         const userId = JSON.parse(localStorage.getItem("userInfo")).id;
@@ -83,7 +71,7 @@ const Card = ({id, ad}) => {
                     </button>
                 </div>
                 <p className="ad-card__price">{ad.price} Р</p>
-                <p className="ad-card__district">{ad.district}</p>
+                <p className="ad-card__district">г. {ad.city}, р-н. {ad.district}</p>
                 <p className="ad-card__date">{ad.date_created}</p>
             </div>
         </div>

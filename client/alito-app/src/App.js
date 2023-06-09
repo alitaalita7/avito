@@ -11,6 +11,7 @@ import SettingsProfile from "./components/user/SettingsProfile/SettingsProfile";
 import LogIn from "./components/ Authorization/LogIn/LogIn";
 import SignUp from "./components/ Authorization/SignUp/SignUp";
 import EditCard from "./components/Cards/EditCard/EditCard";
+import AdReview from "./components/user/AddReview/AdReview";
 
 function App() {
 
@@ -35,7 +36,7 @@ function App() {
                 <Route path={'/signup'} element={<SignUp setIsLogIn={setIsLogIn}/>}/>
                 <Route path={'/edit-advertisements/:id'} element={<EditCard/>}/>
                 <Route path={'/profile/:id/ads'} element={<UserAdvertisements/>}/>
-                <Route path={'/add-review'}></Route>
+                <Route path={'/profile/:id/add-review'} element={<AdReview/>}/>
             </Routes>
         </div>
     );

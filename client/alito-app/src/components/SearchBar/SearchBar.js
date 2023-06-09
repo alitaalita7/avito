@@ -1,5 +1,6 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import './SearchBar.css';
+import {useLocation} from "react-router-dom";
 function SearchBar(props) {
     //поиск
     const {onSearch} = props;
@@ -56,6 +57,13 @@ function SearchBar(props) {
         toggleCategoryList()
     };
     const handleCategoryReset = () => { props.setSelectedCategory(''); };
+
+    const {state} = useLocation()
+    useEffect(()=>{
+        if (state?.category){
+            props.setSelectedCategory(state.category)
+        }
+    }, [state])
 
     return (
         <>
