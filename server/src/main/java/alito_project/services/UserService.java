@@ -1,6 +1,8 @@
 package alito_project.services;
 
 import alito_project.dto.AdvertisementDto;
+import alito_project.dto.EditAdvertisementDTO;
+import alito_project.dto.EditUserDto;
 import alito_project.dto.UserDto;
 import alito_project.exception.UserAlreadyExist;
 import alito_project.exception.UserNotFound;
@@ -84,5 +86,14 @@ public class UserService {
     public void editUser(int user_id, String column, String value){
         String sql = "UPDATE users SET " + column + " = '" + value + "' WHERE id = ?";
         jdbcTemplate.update(sql, user_id);
+    }
+
+    public UserDto editUser_v1(int id, EditUserDto data) {
+        String sql = "UPDATE public.users " +
+                " SET name=?, surname=?, password=? " +
+                "WHERE id = ?";
+        jdbcTemplate.update(sql, data.name, data.surname, data.password, id);
+
+        return getUserInfoById(id);
     }
 }

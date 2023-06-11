@@ -39,7 +39,7 @@ public class AdvertisementService {
     public List<AdIsLike> getAllAdvertisements_v1(int user_id) {
         String sql = "SELECT *,\n" +
                 "cast((SELECT COUNT(*) FROM favorites WHERE favorites.ad_id = advertisements.id and favorites.user_id = ?) as integer) as \"isLike\"\n" +
-                "FROM advertisements";
+                "FROM advertisements where status = 'active'";
         List<AdIsLike> list = new ArrayList<>();
         list = jdbcTemplate.query(sql, (rs, rowNum) -> new AdIsLike(
                 rs.getInt("id"),

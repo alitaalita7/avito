@@ -64,7 +64,6 @@ public class AdvertisementController {
     public ResponseEntity<?> addAdvertisement(@RequestBody Map<String, String> map) {
         System.out.println(map);
         // TODO: добавить валидацию мапы чтобы запрос не падал когда он приходит не с фронта
-        // добавлять картинки в статику
         AdvertisementDto data = new AdvertisementDto(
                 map.get("title"),
                 map.get("description"),
@@ -77,8 +76,6 @@ public class AdvertisementController {
                 map.get("photo"),
                 Integer.parseInt(map.get("user_id"))
         );
-        System.out.println(map.get("user_id"));
-        System.out.println(data);
         advertisementService.addAdvertisement(data);
         return ResponseEntity.ok().build();
     }

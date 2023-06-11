@@ -1,5 +1,7 @@
 package alito_project.controllers;
 
+import alito_project.dto.AdvertisementDto;
+import alito_project.dto.ReviewDto;
 import alito_project.services.ReviewService;
 import alito_project.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -49,5 +51,19 @@ public class ReviewController {
             return ResponseEntity.ok().body(reviewService.getSentReviews(map.get("id")));
         }
         else return ResponseEntity.badRequest().body("IllegalArgumentException");
+    }
+
+    @PostMapping("/add-review")
+    public ResponseEntity<?> addReview(@RequestBody Map<String, String> map) {
+        // TODO: добавить валидацию мапы чтобы запрос не падал когда он приходит не с фронта
+        ReviewDto data = new ReviewDto(
+                Integer.parseInt(map.get("from_user")),
+                Integer.parseInt(map.get("to_user")),
+                Integer.parseInt(map.get("advertisement_id")),
+                Integer.parseInt(map.get("rating")),
+                map.get("comment")
+        );
+        reviewService.addReview(data);
+        return ResponseEntity.ok().build();
     }
 }

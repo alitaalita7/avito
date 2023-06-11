@@ -1,15 +1,14 @@
 package alito_project.controllers;
 
+import alito_project.dto.EditAdvertisementDTO;
+import alito_project.dto.EditUserDto;
 import alito_project.dto.UserDto;
 import alito_project.exception.UserAlreadyExist;
 import alito_project.exception.UserNotFound;
 import alito_project.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.Map;
 
@@ -67,6 +66,11 @@ public class UserController {
         int user_id = Integer.parseInt(map.get("user_id"));
         userService.editUser(user_id, map.get("column"), map.get("value"));
         return ResponseEntity.ok().body("ok");
+    }
+
+    @PutMapping("/user/{id}")
+    public ResponseEntity editUser_v1(@PathVariable int id, @RequestBody EditUserDto data){
+        return ResponseEntity.ok().body(userService.editUser_v1(id, data));
     }
 
 }

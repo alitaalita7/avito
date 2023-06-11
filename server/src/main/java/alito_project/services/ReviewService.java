@@ -1,5 +1,6 @@
 package alito_project.services;
 
+import alito_project.dto.AdvertisementDto;
 import alito_project.dto.ReviewDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -82,5 +83,14 @@ public class ReviewService {
                 rs.getString("name"),
                 rs.getString("surname")
         ), user_id);
+    }
+
+    public void addReview(ReviewDto data) {
+        String sql = "INSERT INTO reviews " +
+                "(from_user, to_user, advertisement_id, rating, date_posted, comment) " +
+                "VALUES (?, ?, ?, ?, CURRENT_TIMESTAMP, ?)";
+
+        jdbcTemplate.update(sql, data.from_user, data.to_user, data.advertisement_id, data.rating,
+                data.comment);
     }
 }

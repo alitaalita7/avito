@@ -35,6 +35,14 @@ public class ReviewDto {
         this.surname = surname;
     }
 
+    public ReviewDto(int from_user, int to_user, int advertisement_id, int rating, String comment) {
+        this.from_user = from_user;
+        this.to_user = to_user;
+        this.advertisement_id = advertisement_id;
+        this.rating = rating;
+        this.comment = comment;
+    }
+
     @Override
     public String toString() {
         return "ReviewDto{" +
