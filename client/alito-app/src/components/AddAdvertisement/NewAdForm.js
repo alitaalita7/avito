@@ -19,7 +19,7 @@ const NewAdForm = ({categories}) => {
     const [house, setHouse] = useState('');
     const handleSubmit = (event) => {
         event.preventDefault();
-        // TODO: валидация собранных данных, сплит фото по слешу(брать последний элемент)
+        // TODO: валидация собранных данных
         const data = {
             title,
             description,

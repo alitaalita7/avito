@@ -151,7 +151,6 @@ const SelectedCard = () => {
                 </div>
                 <div className="details">
                     <span className="date">{cardData.date_created} •  </span>
-                    <span className="views">Просмотров: 15  •  </span>
                     <span className="favorites">В избранном: 3</span>
                 </div>
             </div>

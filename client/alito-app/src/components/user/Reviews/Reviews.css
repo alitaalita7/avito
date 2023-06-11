@@ -31,6 +31,7 @@
 }
 .from h4{
     margin-bottom: 0;
+    cursor: pointer;
 }
 .date p{
     margin: 0;

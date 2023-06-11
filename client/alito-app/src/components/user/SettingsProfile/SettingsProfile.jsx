@@ -3,68 +3,74 @@ import UserInfo from "../UserInfo/UserInfo";
 import "./SettingsProfile.css"
 import myImage from "../../../image/set.png"
 import Card from "../../Cards/Card/Card";
+import {useNavigate, useParams} from "react-router-dom";
 
 const SettingsProfile = () => {
 
-    const user = JSON.parse(localStorage.getItem("userInfo"));
+    const {id} = useParams();
+    const navigate = useNavigate()
 
-    const [editName, setEditName] = useState(false);
-    const [editSurname, setEditSurname] = useState(false);
-    const [editNumber, setEditNumber] = useState(false);
-    const [editPassword, setEditPassword] = useState(false);
 
     const [nameValue, setNameValue] = useState('');
     const [surnameValue, setSurnameValue] = useState('');
-    const [numberValue, setNumberValue] = useState('');
     const [passwordValue, setPasswordValue] = useState('');
-    const handleEditName = () => {
-        setEditName(!editName);
-    };
-    const handleEditSurname = () => {
-        setEditSurname(!editSurname);
-    };
-    const handleEditNumber = () => {
-        setEditNumber(!editNumber);
-    };
-    const handleEditPassword = () => {
-        setEditPassword(!editPassword);
-    };
 
-    const handleNameChange = (event) => {
-        setNameValue(event.target.value);
-    };
-    const handleSurnameChange = (event) => {
-        setSurnameValue(event.target.value);
-    };
-    const handleNumberChange = (event) => {
-        setNumberValue(event.target.value);
-    };
-    const handlePasswordChange = (event) => {
-        setPasswordValue(event.target.value);
-    };
+    const [userInfo, setUserInfo] = useState({})
 
-    const handleKeyDown = (event) => {
-        if (event.key === 'Enter') {
-            const column = event.target.name
-            const value = event.target.value
-            fetch('http://localhost:8080/edit-user', {
-                method: 'POST',
-                headers: {"Content-Type": "application/json"},
-                body: JSON.stringify({user_id: user.id, column: column, value: value})
+    const getUserInfo = () => {
+        fetch("http://localhost:8080/get-user-info-by-id", {
+            method: "POST",
+            headers: {'content-type': "application/json"},
+            body: JSON.stringify({user_id: id})
+        })
+            .then(res => res.json())
+            .then(res => {
+                setUserInfo(res)
+                setNameValue(res.name)
+                setSurnameValue(res.surname)
+                setPasswordValue(res.password)
             })
-                .then(res => res.text())
-                .then(res => console.log(res))
-            setEditName(false);
-            setEditSurname(false);
-            setEditNumber(false);
-            setEditPassword(false);
-        }
-    };
+    }
+
+    const updateUserInfo = async (info) => {
+
+        const response = await fetch(`http://localhost:8080/user/${id}`, {
+            method: 'PUT',
+            headers: {"Content-Type": "application/json"},
+            body: JSON.stringify(info)
+        })
+        const res_json = await response.json()
+        localStorage.setItem("userInfo", JSON.stringify(res_json))
+        setUserInfo(res_json)
+    }
+
+    const handleUpdateUserInfo = async (e) => {
+        e.preventDefault()
+        const inputs = document.querySelectorAll('.set-input')
+        const data = {}
+
+        inputs.forEach(item => {
+            const field_name = item.name
+            if (item.value) {
+                data[field_name] = item.value
+            } else {
+                data[field_name] = item.placeholder
+            }
+        })
+
+        await updateUserInfo(data)
+
+        alert("Данные успешно обновлены")
+    }
+
+    useEffect(() => {
+        getUserInfo()
+    }, [])
 
     return (
         <>
             <UserInfo/>
-            <div className={"container"}>
+            <form onSubmit={handleUpdateUserInfo} className={"set-profile-container"}>
                 <div className={"set-page-name"}>
                     <h1>Настройки профиля</h1>
                 </div>
@@ -74,7 +80,8 @@ const SettingsProfile = () => {
                         <input className="set-input"
                                type="text"
                                name={"name"}
-                               placeholder={user.name}
+                               value={nameValue}
+                               onChange={(event) => setNameValue(event.target.value)}
                         />
                     </div>
                     <div className={"set"}>
@@ -82,15 +89,8 @@ const SettingsProfile = () => {
                         <input className="set-input"
                                type="text"
                                name={"surname"}
-                               placeholder={user.surname}
-                        />
-                    </div>
-                    <div className={"set"}>
-                        <p>Телефон:</p>
-                        <input className="set-input"
-                               type="text"
-                               name={"phone"}
-                               placeholder={user.phone}
+                               value={surnameValue}
+                               onChange={(event) => setSurnameValue(event.target.value)}
                         />
                     </div>
                     <div className={"set"}>
@@ -98,21 +98,14 @@ const SettingsProfile = () => {
                         <input className="set-input"
                                type="password"
                                name={"password"}
-                               placeholder={user.phone}
+                               value={passwordValue}
+                               onChange={(event) => setPasswordValue(event.target.value)}
                         />
-                        <p>Пароль:</p>
-                        {editPassword ? (<input className={"set-input"}
-                                                type="password"
-                                                name={"password"}
-                                                onClick={handlePasswordChange}
-                                                onKeyDown={handleKeyDown}
-                                        />)
-                                    : (<p className={"value"}>{user.password.replace(/./g, "*")}</p>)}
-                        <img src={myImage} alt="My Image" onClick={handleEditPassword}/>
                     </div>
                 </div>
+                <button type={"submit"} className={"button-confirm"}>Сохранить изменения</button>
                 <button className={"remove-profile"}>Удалить профиль</button>
-            </div>
+            </form>
         </>
     )
 }

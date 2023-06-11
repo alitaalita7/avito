@@ -1,7 +1,5 @@
 import React from 'react';
 import NewAdForm from './NewAdForm';
-// import SearchBar from './SearchBar';
-// import { useState } from 'react';
 
 function NewAd() {
     const categories = [

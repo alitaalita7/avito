@@ -2,7 +2,7 @@ import React, {useEffect, useState} from "react";
 import UserInfo from "../UserInfo/UserInfo";
 import "./Reviews.css"
 import Card from "../../Cards/Card/Card";
-import {useParams} from "react-router-dom";
+import {useNavigate, useParams} from "react-router-dom";
 
 const Reviews = () => {
 
@@ -27,7 +27,7 @@ const Reviews = () => {
         })
             .then(res=>res.json())
             .then(res=>setSentReviews(res))
-    },[])
+    },[id])
 
     const [section, setSection] = useState("received");
     const styleForSection = {borderBottom: "3px solid black"}
@@ -44,6 +44,11 @@ const Reviews = () => {
 
         }
     ];
+
+    const navigate = useNavigate();
+    const handleNavigateProfile = (id) => {
+        navigate("/profile/" + id + '/ads')
+    }
 
     return (
         <>
@@ -67,7 +72,12 @@ const Reviews = () => {
                 <div className={"reviews-container"}>
                     {pageSections.find((sec) => sec.key === section)?.reviews.map((review) => (
                         <div className={"review-container"}>
-                            <div className={"from"}>
+                            <div className={"from"}
+                                 onClick={()=>{
+                                     if(section==="received")
+                                        handleNavigateProfile(review.from_user)
+                                     else handleNavigateProfile(review.to_user)
+                                 }}>
                                 <h4>{review.name} {review.surname}</h4>
                             </div>
                             <div className={"date"}>
