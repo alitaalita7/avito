@@ -48,4 +48,9 @@ public class FavoriteService {
         return getFavoritesById(user_id);
     }
 
+    public int getCountFavorites(int ad_id){
+        String sql = "SELECT COUNT(*) FROM favorites WHERE ad_id = ?";
+        return jdbcTemplate.queryForObject(sql, Integer.class, ad_id);
+    }
+
 }

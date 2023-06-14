@@ -1,5 +1,6 @@
 package alito_project.controllers;
 
+import alito_project.dto.AdUser;
 import alito_project.dto.EditAdvertisementDTO;
 import alito_project.dto.EditUserDto;
 import alito_project.dto.UserDto;
@@ -23,7 +24,7 @@ public class UserController {
         if(!map.containsKey("phone") || !map.containsKey("password"))
             return ResponseEntity.badRequest().body("IllegalArgumentException");
         try{
-            UserDto authUser = userService.auth(map.get("phone"), map.get("password"));
+            AdUser authUser = userService.auth(map.get("phone"), map.get("password"));
             return ResponseEntity.ok().body(authUser);
         }catch (UserNotFound e){
             return ResponseEntity.badRequest().body(e.getMessage());
@@ -35,8 +36,7 @@ public class UserController {
             return ResponseEntity.badRequest().body("IllegalArgumentException");
         try {
             UserDto user = new UserDto(map.get("name"), map.get("surname"), map.get("phone"), map.get("password"));
-            userService.addUser(user);
-            return ResponseEntity.ok().body(user);
+            return ResponseEntity.ok().body(userService.addUser(user));
         } catch (UserAlreadyExist e) {
             return ResponseEntity.badRequest().body(e.getMessage()); // Вернуть исключение UserAlreadyExist
         }

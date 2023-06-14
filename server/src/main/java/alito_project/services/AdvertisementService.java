@@ -177,4 +177,14 @@ public class AdvertisementService {
         return getAdvertisementById(ad_id);
     }
 
+    public void deleteAdvertisementArchive(int ad_id){
+        String sql = "UPDATE advertisements SET status = 'archive' WHERE id = ?";
+        jdbcTemplate.update(sql, ad_id);
+    }
+
+    public void recoveryAdvertisement(int ad_id){
+        String sql = "UPDATE advertisements SET status = 'active' WHERE id = ?";
+        jdbcTemplate.update(sql, ad_id);
+    }
+
 }

@@ -58,4 +58,12 @@ public class FavoriteController {
         }
         else return ResponseEntity.badRequest().body("IllegalArgumentException");
     }
+
+    @PostMapping("/get-count-favorites-by-ad")
+    public ResponseEntity getCountFavorites(@RequestBody Map<String, Integer> map){
+        if (!map.containsKey("ad_id")){
+            return ResponseEntity.badRequest().body("IllegalArgumentException");
+        }
+        return ResponseEntity.ok().body(favoriteService.getCountFavorites(map.get("ad_id")));
+    }
 }

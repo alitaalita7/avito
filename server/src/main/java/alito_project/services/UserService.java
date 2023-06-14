@@ -1,9 +1,6 @@
 package alito_project.services;
 
-import alito_project.dto.AdvertisementDto;
-import alito_project.dto.EditAdvertisementDTO;
-import alito_project.dto.EditUserDto;
-import alito_project.dto.UserDto;
+import alito_project.dto.*;
 import alito_project.exception.UserAlreadyExist;
 import alito_project.exception.UserNotFound;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,9 +20,9 @@ public class UserService {
         return jdbcTemplate.queryForObject(sql, Integer.class, phone) != 0;
     }
 
-    public UserDto getUser(String phone, String password){
+    public AdUser getUser(String phone, String password){
         return jdbcTemplate.query("SELECT * FROM users WHERE phone = ? and password = ?",
-                (rs, rowNum) -> new UserDto(
+                (rs, rowNum) -> new AdUser(
                         rs.getInt("id"),
                         rs.getString("name"),
                         rs.getString("surname"),
@@ -37,14 +34,14 @@ public class UserService {
         ).get(0);
     }
 
-    public UserDto auth(String phone, String password) throws UserNotFound {
+    public AdUser auth(String phone, String password) throws UserNotFound {
         String sql = "SELECT COUNT(*) FROM users WHERE phone = ? and password = ?";
         if(jdbcTemplate.queryForObject(sql, Integer.class, phone, password) == 1){
             return getUser(phone, password);
         } else throw new UserNotFound("Incorrect login or password");
     }
 
-    public UserDto addUser(UserDto user) throws UserAlreadyExist {
+    public AdUser addUser(UserDto user) throws UserAlreadyExist {
         if(isSign(user.phone)){
             throw new UserAlreadyExist("Пользователь с таким номером телефона уже существует");
         }

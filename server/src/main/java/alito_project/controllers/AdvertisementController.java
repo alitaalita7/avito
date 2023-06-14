@@ -62,7 +62,6 @@ public class AdvertisementController {
     }
     @PostMapping("/advertisement/add")
     public ResponseEntity<?> addAdvertisement(@RequestBody Map<String, String> map) {
-        System.out.println(map);
         // TODO: добавить валидацию мапы чтобы запрос не падал когда он приходит не с фронта
         AdvertisementDto data = new AdvertisementDto(
                 map.get("title"),
@@ -82,9 +81,7 @@ public class AdvertisementController {
 
     @PostMapping("/edit-ad")
     public ResponseEntity editAdvertisement(@RequestBody Map<String, String> map){
-        System.out.println(123);
         if(!map.containsKey("ad_id") || !map.containsKey("column") || !map.containsKey("value")){
-            System.out.println(map);
             return ResponseEntity.badRequest().body("IllegalArgumentException");
         }
         int ad_id = Integer.parseInt(map.get("ad_id"));
@@ -95,6 +92,24 @@ public class AdvertisementController {
     @PutMapping("/advertisement/{id}")
     public ResponseEntity editAdvertisement_v1(@PathVariable int id, @RequestBody EditAdvertisementDTO data){
         return ResponseEntity.ok().body(advertisementService.editAdvertisement_v1(id, data));
+    }
+
+    @PostMapping("/delete-advertisement-archive")
+    public ResponseEntity deleteAdvertisementArchive(@RequestBody Map<String, Integer> map){
+        if(!map.containsKey("ad_id")){
+            return ResponseEntity.badRequest().body("IllegalArgumentException");
+        }
+        advertisementService.deleteAdvertisementArchive(map.get("ad_id"));
+        return ResponseEntity.status(204).build();
+    }
+
+    @PostMapping("/recovery-advertisement")
+    public ResponseEntity recoveryAdvertisement(@RequestBody Map<String, Integer> map){
+        if(!map.containsKey("ad_id")){
+            return ResponseEntity.badRequest().body("IllegalArgumentException");
+        }
+        advertisementService.recoveryAdvertisement(map.get("ad_id"));
+        return ResponseEntity.status(204).build();
     }
 
 }
