@@ -25,6 +25,7 @@ const SignUp = ({setIsLogIn}) => {
                 }
             })
             .then(res => {
+                console.log(res)
                 localStorage.setItem("userInfo", JSON.stringify(res));
                 setIsLogIn(true);
                 navigate("/")

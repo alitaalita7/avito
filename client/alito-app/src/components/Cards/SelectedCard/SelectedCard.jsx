@@ -1,22 +1,18 @@
-import {useNavigate, useParams} from "react-router-dom";
+import {redirect, useNavigate, useParams} from "react-router-dom";
 import React, {useEffect, useState} from "react";
 import ".//SelectedCard.css"
 import editImage from "../../../image/edit.svg"
 import deleteImage from "../../../image/delete.svg"
 import userInfo from "../../user/UserInfo/UserInfo";
-import card from "../Card/Card";
+
 const SelectedCard = () => {
-    const { id } = useParams();
+    const {id} = useParams();
     const [cardData, setCardData] = useState({});
     const [isFavourite, setIsFavourite] = useState(false);
     const [reviewInfo, setReviewInfo] = useState({});
     const [userInfo, setUserInfo] = useState({});
     const [showFullPhone, setShowFullPhone] = useState(false);
-
-    const handleFavouriteClick = () => {
-        setIsFavourite(!isFavourite);
-        console.log("Добавлено в избранное");
-    };
+    const [countFavorites, setCountFavorites] = useState('');
 
     const handleShowPhoneClick = () => {
         setShowFullPhone(!showFullPhone);
@@ -25,24 +21,24 @@ const SelectedCard = () => {
     useEffect(() => {
         fetch("http://localhost:8080/get-advertisement-by-id", {
             method: "POST",
-            headers: { 'content-type': "application/json" },
-            body: JSON.stringify({ id: id })
+            headers: {'content-type': "application/json"},
+            body: JSON.stringify({id: id})
         })
             .then(res => res.json())
             .then(res => setCardData(res));
 
         fetch("http://localhost:8080/get-review-info-by-ad", {
             method: "POST",
-            headers: { 'content-type': "application/json" },
-            body: JSON.stringify({ id: id })
+            headers: {'content-type': "application/json"},
+            body: JSON.stringify({id: id})
         })
             .then(res => res.json())
             .then(res => setReviewInfo(res));
 
         fetch("http://localhost:8080/get-user-info-by-ad", {
             method: "POST",
-            headers: { 'content-type': "application/json" },
-            body: JSON.stringify({ id: id })
+            headers: {'content-type': "application/json"},
+            body: JSON.stringify({id: id})
         })
             .then(res => res.json())
             .then(res => setUserInfo(res));
@@ -54,10 +50,19 @@ const SelectedCard = () => {
             headers: {"Content-Type": "application/json"},
             body: JSON.stringify({user_id: userId, ad_id: id}),
         })
-            .then(res=>res.text())
-            .then(res=>{
-                if(res==='yes') setIsFavourite(true)
+            .then(res => res.text())
+            .then(res => {
+                if (res === 'yes') setIsFavourite(true)
             })
+
+        fetch(`http://localhost:8080/get-count-favorites-by-ad`, {
+            method: "POST",
+            headers: {"Content-Type": "application/json"},
+            body: JSON.stringify({ad_id: id}),
+        })
+            .then(res => res.json())
+            .then(res => setCountFavorites(res))
+
     }, [id]);
 
     const handleFavourite = () => {
@@ -97,22 +102,36 @@ const SelectedCard = () => {
     const navigate = useNavigate();
     const handleNavigateCategory = () => {
         navigate("/", {
-            state:{category: cardData.category}
+            state: {category: cardData.category}
         });
     };
-    const isMyAd =()=>{
+    const isMyAd = () => {
         const user = JSON.parse(localStorage.getItem("userInfo")).id
-        if(cardData.user_id==user){
+        if (cardData.user_id == user) {
             return true
-        }
-        else return false
+        } else return false
     }
-    const handleNavigateToEdit = () =>{
+    const handleNavigateToEdit = () => {
         navigate("/edit-advertisements/" + cardData?.id)
     }
 
     const handleNavigateProfile = () => {
         navigate("/profile/" + userInfo.id + '/ads')
+    }
+
+    const showConfirmToDelete = () => {
+        const con = window.confirm("Вы действительно хотите удалить это объявление? Оно попадет в ваш архив.")
+        if (con) {
+            fetch(`http://localhost:8080/delete-advertisement-archive`, {
+                method: "POST",
+                headers: {"Content-Type": "application/json"},
+                body: JSON.stringify({ad_id: id}),
+            })
+                .then((res) => {
+                    if(res.status==204)
+                        navigate(-1)
+                })
+        }
     }
 
     return (
@@ -123,21 +142,21 @@ const SelectedCard = () => {
                 <div className={"button-group"}>
                     <button onClick={handleFavourite} className="favorite-button">
                         <span>{
-                            isFavourite? '💙' : '🤍'
+                            isFavourite ? '💙' : '🤍'
                         }</span>
                         Добавить в избранное
                     </button>
-                    {isMyAd()&&
-                        <button className={"edit-button-ad"}  onClick={handleNavigateToEdit} >
+                    {isMyAd() &&
+                        <button className={"edit-button-ad"} onClick={handleNavigateToEdit}>
                             <img src={editImage}/>
                         </button>}
-                    {isMyAd()&&
-                        <button className={"delete-button-ad"}>
+                    {isMyAd() &&
+                        <button className={"delete-button-ad"} onClick={showConfirmToDelete}>
                             <img src={deleteImage}/>
                         </button>}
                 </div>
                 <div className="image-container">
-                    <img src={cardData.photo} alt={cardData.title} className="image" />
+                    <img src={cardData.photo} alt={cardData.title} className="image"/>
                 </div>
                 <div className="address">
                     <h2 className="address-label">Адрес:</h2>
@@ -151,7 +170,7 @@ const SelectedCard = () => {
                 </div>
                 <div className="details">
                     <span className="date">{cardData.date_created} •  </span>
-                    <span className="favorites">В избранном: 3</span>
+                    <span className="favorites">В избранном: {countFavorites}</span>
                 </div>
             </div>
             <div className="fast-block">
@@ -165,7 +184,7 @@ const SelectedCard = () => {
                         <div className="seller-name">{userInfo.name}</div>
                         <div className="seller-description">
                             {reviewInfo.avg ?
-                                <div>{reviewInfo.avg + " (из " + reviewInfo.count + " отзывов)"}</div>
+                                <div>{reviewInfo.avg.toFixed(1) + " (из " + reviewInfo.count + " отзывов)"}</div>
                                 : <div>Нет отзывов</div>}
                         </div>
                     </div>

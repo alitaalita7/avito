@@ -69,3 +69,11 @@
     color: #757575;
     text-align: center;
 }
+.recovery-image{
+    height: 20px;
+}
+.card-buttons{
+    margin-top: 7px;
+    display: flex;
+    justify-content: space-evenly;
+}

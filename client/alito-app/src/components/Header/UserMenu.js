@@ -26,7 +26,7 @@ function UserMenu({setIsLogIn, onClose}) {
       <ul>
         <li>
             {reviewInfo.avg?
-                <p>{reviewInfo.avg + " (из " + reviewInfo.count + " отзывов)"}</p>
+                <p>{reviewInfo.avg.toFixed(1) + " (из " + reviewInfo.count + " отзывов)"}</p>
                 : <p>Нет отзывов</p>}
         </li>
         <li>

@@ -9,6 +9,7 @@ const UserAdvertisements = () => {
     const {id} = useParams()
     const [adsActive, setAdsActive] = useState([]);
     const [adsArchive, setAdsArchive] = useState([]);
+    const [section, setSection] = useState("active");
 
     useEffect(() => {
         fetch("http://localhost:8080/get-advertisements-by-user-id-active", {
@@ -26,7 +27,7 @@ const UserAdvertisements = () => {
         })
             .then(res => res.json())
             .then(res => setAdsArchive(res))
-    }, [id])
+    }, [id, section])
 
     useEffect(() => {
         if (id != JSON.parse(localStorage.getItem("userInfo")).id) {
@@ -48,7 +49,7 @@ const UserAdvertisements = () => {
         }
     }, [id])
 
-    const [section, setSection] = useState("active");
+
     const styleForSection = {borderBottom: "3px solid black"}
     const [pageSections, setPageSections] = useState([
         {
@@ -60,6 +61,22 @@ const UserAdvertisements = () => {
             key: "archive",
         }
     ]);
+
+    const showConfirmToRecovery = (id) => {
+        const userId = JSON.parse(localStorage.getItem("userInfo")).id;
+        const con = window.confirm("Вы действительно хотите восстановить это объявление? Его снова увидят другие пользователи.")
+        if (con) {
+            fetch(`http://localhost:8080/recovery-advertisement`, {
+                method: "POST",
+                headers: {"Content-Type": "application/json"},
+                body: JSON.stringify({ad_id: id}),
+            })
+                .then((res) => {
+                    if (res.status == 204)
+                        setSection("active")
+                })
+        }
+    }
 
     return (
         <>
@@ -80,12 +97,17 @@ const UserAdvertisements = () => {
                         </h2>
                     ))}
                 </div>
+                {section==="archive" &&
+                    <p className={"text-archive"}>Другие пользователи не видят ваши архивные объявления</p>
+                }
                 <div className={"ads-container"}>
                     {section === "active" && (
                         adsActive.map((ad) => <Card key={ad.id} ad={ad}/>)
                     )}
                     {section === "archive" && (
-                        adsArchive.map((ad) => <Card key={ad.id} ad={ad}/>)
+                        adsArchive.map((ad) => <Card key={ad.id}
+                                                     ad={ad}
+                                                     showConfirmToRecovery={()=>showConfirmToRecovery(ad.id)}/>)
                     )}
                 </div>
             </div>

@@ -19,6 +19,11 @@
     padding: 5px;
     margin: 0;
 }
+.text-archive{
+    font-style: italic;
+    margin-bottom: 0;
+    color: #757575;
+}
 
 .ads-container{
     display: flex;

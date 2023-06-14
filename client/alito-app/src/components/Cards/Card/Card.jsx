@@ -1,8 +1,10 @@
 import React, {useEffect, useState} from "react";
 import {useNavigate} from "react-router-dom";
 import './Card.css'
+import recoveryImage from "../../../image/recovery.png"
+import deleteImage from "../../../image/delete.svg"
 
-const Card = ({id, ad}) => {
+const Card = ({ id, ad, showConfirmToRecovery=()=>{} }) => {
 
     const [isFavourite, setIsFavourite] = useState(ad.isLike);
     const navigate = useNavigate();
@@ -66,13 +68,24 @@ const Card = ({id, ad}) => {
                     </h3>
                     <button onClick={handleFavouriteClick} className='ad-card__favourite'>
                         <span>{
-                            isFavourite? '💙' : '🤍'
+                            isFavourite ? '💙' : '🤍'
                         }</span>
                     </button>
                 </div>
                 <p className="ad-card__price">{ad.price} Р</p>
                 <p className="ad-card__district">г. {ad.city}, р-н. {ad.district}</p>
                 <p className="ad-card__date">{ad.date_created}</p>
+                {ad.status === "archive" &&
+                    <div className={"card-buttons"}>
+                        <button className={"delete-button-ad"} onClick={showConfirmToRecovery}>
+                            <img className={"recovery-image"} src={recoveryImage}/>
+                        </button>
+                        <button className={"delete-button-ad"}>
+                            <img src={deleteImage}/>
+                        </button>
+                    </div>
+
+                }
             </div>
         </div>
     )
