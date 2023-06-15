@@ -44,6 +44,11 @@ function UserMenu({setIsLogIn, onClose}) {
         <li>
           <Link to="/login" onClick={()=>{onClose(); logOut()} } >Выход</Link>
         </li>
+        {JSON.parse(localStorage.getItem("userInfo")).is_admin === true &&
+            <li>
+              <Link to="/admin" onClick={onClose} >Админ-панель</Link>
+            </li>
+        }
       </ul>
     </div>
   );

@@ -78,6 +78,21 @@ const UserAdvertisements = () => {
         }
     }
 
+    const showConfirmToDelete = (id) => {
+        const con = window.confirm("Вы действительно хотите окончательно удалить это объявление?")
+        if (con) {
+            fetch(`http://localhost:8080/delete-advertisement`, {
+                method: "POST",
+                headers: {"Content-Type": "application/json"},
+                body: JSON.stringify({ad_id: id})
+            })
+                .then((res) => {
+                    if (res.status == 204)
+                        setSection("active")
+                })
+        }
+    }
+
     return (
         <>
             <UserInfo/>
@@ -97,7 +112,7 @@ const UserAdvertisements = () => {
                         </h2>
                     ))}
                 </div>
-                {section==="archive" &&
+                {section === "archive" &&
                     <p className={"text-archive"}>Другие пользователи не видят ваши архивные объявления</p>
                 }
                 <div className={"ads-container"}>
@@ -107,7 +122,8 @@ const UserAdvertisements = () => {
                     {section === "archive" && (
                         adsArchive.map((ad) => <Card key={ad.id}
                                                      ad={ad}
-                                                     showConfirmToRecovery={()=>showConfirmToRecovery(ad.id)}/>)
+                                                     showConfirmToRecovery={() => showConfirmToRecovery(ad.id)}
+                                                     showConfirmToDelete={() => showConfirmToDelete(ad.id)}/>)
                     )}
                 </div>
             </div>

@@ -1,5 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import './NewAdForm.css'
+import {useNavigate} from "react-router-dom";
 const NewAdForm = ({categories}) => {
 
     const [title, setTitle] = useState('');
@@ -13,12 +14,15 @@ const NewAdForm = ({categories}) => {
     const handlePhotosChange = (event) => {setPhoto(event.target.value);};
     const handleDescriptionChange = (event) => {setDescription(event.target.value);};
 
+    const navigate = useNavigate();
+
     const [city, setCity] = useState('');
     const [district, setDistrict] = useState('');
     const [street, setStreet] = useState('');
     const [house, setHouse] = useState('');
     const handleSubmit = (event) => {
         event.preventDefault();
+        const user_id = JSON.parse(localStorage.getItem("userInfo")).id
         // TODO: валидация собранных данных
         const data = {
             title,
@@ -32,15 +36,15 @@ const NewAdForm = ({categories}) => {
             street,
             house,
             photo,
-            "user_id": JSON.parse(localStorage.getItem("userInfo")).id
+            "user_id": user_id
         };
         fetch("http://localhost:8080/advertisement/add", {
             method: "POST",
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(data)
         })
-            .then((res) => alert('123'))
-    };
+            navigate(`/profile/${user_id}/ads`)
+    }
 
     return (
         <form onSubmit={handleSubmit}>

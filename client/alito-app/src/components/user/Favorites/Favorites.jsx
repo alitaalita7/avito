@@ -16,7 +16,6 @@ const Favorites=()=>{
             .then(res => res.json())
             .then(res => {
                 setAds(res)
-                console.log(res)
             })
     }, [])
 

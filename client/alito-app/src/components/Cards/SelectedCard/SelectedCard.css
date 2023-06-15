@@ -33,7 +33,7 @@
     margin-bottom: 10px;
 }
 
-.edit-button-ad, .delete-button-ad{
+.edit-button-ad, .archive-button-ad, .recovery-button-ad{
     background-color: rgb(255, 255, 255);
     border-radius: 5px;
     padding: 5px 10px;
@@ -41,6 +41,13 @@
     border: none;
     cursor: pointer;
     margin-bottom: 10px;
+}
+
+.archiveImage {
+    height: 17px;
+}
+.recoveryImage{
+    height: 22px;
 }
 
 .image-container{

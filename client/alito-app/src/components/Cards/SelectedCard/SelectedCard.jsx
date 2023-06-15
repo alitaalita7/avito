@@ -2,8 +2,11 @@ import {redirect, useNavigate, useParams} from "react-router-dom";
 import React, {useEffect, useState} from "react";
 import ".//SelectedCard.css"
 import editImage from "../../../image/edit.svg"
-import deleteImage from "../../../image/delete.svg"
+import archiveImage from "../../../image/archive.png"
+import recoveryImage from "../../../image/recovery.png"
 import userInfo from "../../user/UserInfo/UserInfo";
+import card from "../Card/Card";
+import {toast, ToastContainer} from "react-toastify";
 
 const SelectedCard = () => {
     const {id} = useParams();
@@ -16,6 +19,8 @@ const SelectedCard = () => {
 
     const handleShowPhoneClick = () => {
         setShowFullPhone(!showFullPhone);
+        navigator.clipboard.writeText(userInfo.phone)
+        toast.info("Скопировано в буфер обмена")
     };
 
     useEffect(() => {
@@ -119,8 +124,8 @@ const SelectedCard = () => {
         navigate("/profile/" + userInfo.id + '/ads')
     }
 
-    const showConfirmToDelete = () => {
-        const con = window.confirm("Вы действительно хотите удалить это объявление? Оно попадет в ваш архив.")
+    const showConfirmToArchive = () => {
+        const con = window.confirm("Вы действительно хотите архивировать это объявление? Другие пользователи его не увидят")
         if (con) {
             fetch(`http://localhost:8080/delete-advertisement-archive`, {
                 method: "POST",
@@ -129,6 +134,20 @@ const SelectedCard = () => {
             })
                 .then((res) => {
                     if(res.status==204)
+                        navigate(-1)
+                })
+        }
+    }
+    const showConfirmToRecovery = () => {
+        const con = window.confirm("Вы действительно хотите восстановить это объявление? Его снова увидят другие пользователи.")
+        if (con) {
+            fetch(`http://localhost:8080/recovery-advertisement`, {
+                method: "POST",
+                headers: {"Content-Type": "application/json"},
+                body: JSON.stringify({ad_id: cardData.id}),
+            })
+                .then((res) => {
+                    if (res.status == 204)
                         navigate(-1)
                 })
         }
@@ -150,9 +169,13 @@ const SelectedCard = () => {
                         <button className={"edit-button-ad"} onClick={handleNavigateToEdit}>
                             <img src={editImage}/>
                         </button>}
-                    {isMyAd() &&
-                        <button className={"delete-button-ad"} onClick={showConfirmToDelete}>
-                            <img src={deleteImage}/>
+                    {isMyAd() && cardData.status==="active" &&
+                        <button className={"archive-button-ad"} onClick={showConfirmToArchive}>
+                            <img className={"archiveImage"} src={archiveImage}/>
+                        </button>}
+                    {isMyAd() && cardData.status==="archive" &&
+                        <button className={"recovery-button-ad"} onClick={showConfirmToRecovery}>
+                            <img className={"recoveryImage"} src={recoveryImage}/>
                         </button>}
                 </div>
                 <div className="image-container">
@@ -177,7 +200,7 @@ const SelectedCard = () => {
                 <h1 className="price">{cardData.price} Р</h1>
                 <button className="show-phone-button" onClick={handleShowPhoneClick}>
                     <span>Показать телефон</span>
-                    <span>{showFullPhone ? userInfo.phone : '+7 ХХХ XXX XX XX'}</span>
+                    <span id={"phone"}>{showFullPhone ? userInfo.phone : '+7 ХХХ XXX XX XX'}</span>
                 </button>
                 <div className="seller-info" onClick={handleNavigateProfile}>
                     <div>
@@ -193,6 +216,7 @@ const SelectedCard = () => {
                     </div>
                 </div>
             </div>
+            <ToastContainer />
         </div>
     );
 };

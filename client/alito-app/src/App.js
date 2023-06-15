@@ -1,6 +1,6 @@
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useLayoutEffect, useState} from 'react';
 import Header from './components/Header/Header';
-import {Route, Routes} from 'react-router-dom';
+import {json, Route, Routes, useNavigate} from 'react-router-dom';
 import Main from './components/Main'
 import NewAd from './components/AddAdvertisement/NewAd'
 import SelectedCard from "./components/Cards/SelectedCard/SelectedCard";
@@ -12,31 +12,63 @@ import LogIn from "./components/ Authorization/LogIn/LogIn";
 import SignUp from "./components/ Authorization/SignUp/SignUp";
 import EditCard from "./components/Cards/EditCard/EditCard";
 import AdReview from "./components/user/AddReview/AdReview";
+import ProtectRouter from "./hoc/ProtectRouter";
+import 'react-toastify/dist/ReactToastify.css';
+import Admin from "./components/Admin/Admin";
 
 function App() {
 
-    const [isLogIn, setIsLogIn] = useState(false);
-    useEffect(() => {
-        const userInfo = JSON.parse(localStorage.getItem('userInfo'));
-        if(userInfo) setIsLogIn(true);
-    }, [])
+    const [isLogIn, setIsLogIn] = useState(!!localStorage.getItem("userInfo"));
+    const userInfo = JSON.parse(localStorage.getItem("userInfo")) || {is_admin:false}
 
     return (
         <div className="App">
             <Header isLoggedIn={isLogIn} setIsLogIn={setIsLogIn}/>
             <Routes>
-                <Route path='/' element={[<Main key={1}/>]}/>
-                <Route path='/new-addvertisements' element={<NewAd/>}/>
-                <Route path='/ad/:id' element={<SelectedCard/>}/>
-                <Route path='/my-ads' element={<UserAdvertisements/>}/>
-                <Route path={'/profile/:id/reviews'} element={<Reviews/>}/>
-                <Route path={'/profile/:id/favorites'} element={<Favorites/>}/>
-                <Route path={'/profile/:id/settings'} element={<SettingsProfile/>}/>
-                <Route path={'/login'} element={<LogIn setIsLogIn={setIsLogIn}/>}/>
-                <Route path={'/signup'} element={<SignUp setIsLogIn={setIsLogIn}/>}/>
-                <Route path={'/edit-advertisements/:id'} element={<EditCard/>}/>
-                <Route path={'/profile/:id/ads'} element={<UserAdvertisements/>}/>
-                <Route path={'/profile/:id/add-review'} element={<AdReview/>}/>
+                <Route path='/'
+                       element={<ProtectRouter isLogin={isLogIn}>
+                                    <Main/>
+                                </ProtectRouter>}/>
+                <Route path='/new-addvertisements'
+                       element={<ProtectRouter isLogin={isLogIn}>
+                                     <NewAd/>
+                                </ProtectRouter>}/>
+                <Route path='/ad/:id'
+                       element={<ProtectRouter isLogin={isLogIn}>
+                                    <SelectedCard/>
+                                </ProtectRouter>}/>
+                <Route path='/my-ads'
+                       element={<ProtectRouter isLogin={isLogIn}>
+                                    <UserAdvertisements/>
+                                 </ProtectRouter>}/>
+                <Route path={'/profile/:id/reviews'}
+                       element={<ProtectRouter isLogin={isLogIn}>
+                                    <Reviews/>
+                                </ProtectRouter>}/>
+                <Route path={'/profile/:id/favorites'}
+                       element={<ProtectRouter isLogin={isLogIn}>
+                                    <Favorites/>
+                                </ProtectRouter>}/>
+                <Route path={'/profile/:id/settings'}
+                       element={<ProtectRouter isLogin={isLogIn}>
+                                    <SettingsProfile/>
+                                </ProtectRouter>}/>
+                <Route path={'/login'}
+                       element={<LogIn setIsLogIn={setIsLogIn}/>}/>
+                <Route path={'/signup'}
+                       element={<SignUp setIsLogIn={setIsLogIn}/>}/>
+                <Route path={'/edit-advertisements/:id'}
+                       element={<ProtectRouter isLogin={isLogIn}><EditCard/></ProtectRouter>}/>
+                <Route path={'/profile/:id/ads'}
+                       element={<ProtectRouter isLogin={isLogIn}><UserAdvertisements/></ProtectRouter>}/>
+                <Route path={'/profile/:id/add-review'}
+                       element={<ProtectRouter isLogin={isLogIn}>
+                                    <AdReview/>
+                                </ProtectRouter>}/>
+                <Route path={'/admin'}
+                       element={<ProtectRouter isLogin={userInfo.is_admin} path={"/"}>
+                                    <Admin/>
+                                </ProtectRouter>}/>
             </Routes>
         </div>
     );
