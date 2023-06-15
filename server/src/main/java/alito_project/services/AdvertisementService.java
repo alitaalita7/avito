@@ -39,7 +39,7 @@ public class AdvertisementService {
     public List<AdIsLike> getAllAdvertisements_v1(int user_id) {
         String sql = "SELECT *,\n" +
                 "cast((SELECT COUNT(*) FROM favorites WHERE favorites.ad_id = advertisements.id and favorites.user_id = ?) as integer) as \"isLike\"\n" +
-                "FROM advertisements where status = 'active'";
+                "FROM advertisements where status = 'active' and is_deleted = false";
         List<AdIsLike> list = new ArrayList<>();
         list = jdbcTemplate.query(sql, (rs, rowNum) -> new AdIsLike(
                 rs.getInt("id"),
@@ -92,7 +92,7 @@ public class AdvertisementService {
     public List<AdIsLike> getAdvertisementsByUserIdActive(int user_id) {
         String sql = "SELECT *,\n" +
                 "cast((SELECT COUNT(*) FROM favorites WHERE favorites.ad_id = advertisements.id and favorites.user_id = ?) as integer) as \"isLike\"\n" +
-                "FROM advertisements WHERE user_id=? and status = 'active'";
+                "FROM advertisements WHERE user_id=? and status = 'active' and is_deleted = false";
         List<AdIsLike> list = new ArrayList<>();
         list = jdbcTemplate.query(sql, (rs, rowNum) -> new AdIsLike(
                 rs.getInt("id"),
@@ -116,7 +116,7 @@ public class AdvertisementService {
     public List<AdIsLike> getAdvertisementsByUserIdArchive(int user_id) {
         String sql = "SELECT *,\n" +
                 "cast((SELECT COUNT(*) FROM favorites WHERE favorites.ad_id = advertisements.id and favorites.user_id = ?) as integer) as \"isLike\"\n" +
-                "FROM advertisements WHERE user_id=? and status = 'archive'";
+                "FROM advertisements WHERE user_id=? and status = 'archive' and is_deleted = false";
         List<AdIsLike> list = new ArrayList<>();
         list = jdbcTemplate.query(sql, (rs, rowNum) -> new AdIsLike(
                 rs.getInt("id"),
@@ -140,7 +140,7 @@ public class AdvertisementService {
     public List<AdIsLike> getFavoriteAdvertisements(int user_id) {
         String sql = "SELECT *,\n" +
                 "cast((SELECT COUNT(*) FROM favorites WHERE favorites.ad_id = advertisements.id and favorites.user_id = ?) as integer) as isLike\n" +
-                "FROM advertisements WHERE cast((SELECT COUNT(*) FROM favorites WHERE favorites.ad_id = advertisements.id and favorites.user_id = ?) as integer) = 1";
+                "FROM advertisements WHERE cast((SELECT COUNT(*) FROM favorites WHERE favorites.ad_id = advertisements.id and favorites.user_id = ?) as integer) = 1 and status = 'active' and is_deleted = false ";
         List<AdIsLike> list = new ArrayList<>();
         list = jdbcTemplate.query(sql, (rs, rowNum) -> new AdIsLike(
                 rs.getInt("id"),
@@ -186,5 +186,12 @@ public class AdvertisementService {
         String sql = "UPDATE advertisements SET status = 'active' WHERE id = ?";
         jdbcTemplate.update(sql, ad_id);
     }
+
+    public void deleteAdvertisement(int ad_id){
+        String sql = "UPDATE advertisements SET is_deleted = true WHERE id = ?";
+        jdbcTemplate.update(sql, ad_id);
+    }
+
+
 
 }

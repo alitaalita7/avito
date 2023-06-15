@@ -14,6 +14,7 @@ public class AdvertisementDto {
     public String house;
     public String photo;
     public int user_id;
+    public boolean is_deleted;
     public AdvertisementDto(int id, String title, String description, int price, String date_created, String status, String category, String city, String district, String street, String house, String photo, int user_id) {
         this.id = id;
         this.title = title;
@@ -41,6 +42,23 @@ public class AdvertisementDto {
         this.house = house;
         this.photo = photo;
         this.user_id = user_id;
+    }
+
+    public AdvertisementDto(int id, String title, String description, int price, String date_created, String status, String category, String city, String district, String street, String house, String photo, int user_id, boolean is_deleted) {
+        this.id = id;
+        this.title = title;
+        this.description = description;
+        this.price = price;
+        this.date_created = date_created;
+        this.status = status;
+        this.category = category;
+        this.city = city;
+        this.district = district;
+        this.street = street;
+        this.house = house;
+        this.photo = photo;
+        this.user_id = user_id;
+        this.is_deleted = is_deleted;
     }
 
     @Override

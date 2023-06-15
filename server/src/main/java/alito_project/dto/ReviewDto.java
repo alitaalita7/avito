@@ -11,8 +11,9 @@ public class ReviewDto {
     public String title;
     public String name;
     public String surname;
+    public boolean is_deleted;
 
-    public ReviewDto(int id, int from_user, int to_user, int advertisement_id, int rating, String date_posted, String comment) {
+    public ReviewDto(int id, int from_user, int to_user, int advertisement_id, int rating, String date_posted, String comment, boolean is_deleted) {
         this.id = id;
         this.from_user = from_user;
         this.to_user = to_user;
@@ -20,6 +21,7 @@ public class ReviewDto {
         this.rating = rating;
         this.date_posted = date_posted;
         this.comment = comment;
+        this.is_deleted = is_deleted;
     }
 
     public ReviewDto(int id, int from_user, int to_user, int advertisement_id, int rating, String date_posted, String comment, String title, String name, String surname) {

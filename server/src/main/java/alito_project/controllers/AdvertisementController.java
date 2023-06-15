@@ -112,4 +112,13 @@ public class AdvertisementController {
         return ResponseEntity.status(204).build();
     }
 
+    @PostMapping("/delete-advertisement")
+    public ResponseEntity deleteAdvertisement(@RequestBody Map<String, Integer> map){
+        if(!map.containsKey("ad_id")){
+            return ResponseEntity.badRequest().body("IllegalArgumentException");
+        }
+        advertisementService.deleteAdvertisement(map.get("ad_id"));
+        return ResponseEntity.status(204).build();
+    }
+
 }
