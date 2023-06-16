@@ -4,6 +4,7 @@ import ".//SelectedCard.css"
 import editImage from "../../../image/edit.svg"
 import archiveImage from "../../../image/archive.png"
 import recoveryImage from "../../../image/recovery.png"
+import deleteImage from "../../../image/delete.svg"
 import userInfo from "../../user/UserInfo/UserInfo";
 import card from "../Card/Card";
 import {toast, ToastContainer} from "react-toastify";
@@ -116,6 +117,12 @@ const SelectedCard = () => {
             return true
         } else return false
     }
+    const isAdmin = () => {
+        const admin = JSON.parse(localStorage.getItem("userInfo")).is_admin
+        if (admin) {
+            return true
+        } else return false
+    }
     const handleNavigateToEdit = () => {
         navigate("/edit-advertisements/" + cardData?.id)
     }
@@ -134,7 +141,7 @@ const SelectedCard = () => {
             })
                 .then((res) => {
                     if(res.status==204)
-                        navigate(-1)
+                        navigate(`/profile/${JSON.parse(localStorage.getItem("userInfo")).id}/ads`)
                 })
         }
     }
@@ -148,7 +155,22 @@ const SelectedCard = () => {
             })
                 .then((res) => {
                     if (res.status == 204)
-                        navigate(-1)
+                        navigate(`/profile/${JSON.parse(localStorage.getItem("userInfo")).id}/ads`)
+                })
+        }
+    }
+
+    const showConfirmToDelete = () => {
+        const con = window.confirm("Удалить объявление с id = " + (id) + "?")
+        if (con) {
+            fetch(`http://localhost:8080/admin/delete-advertisement`, {
+                method: "POST",
+                headers: {"Content-Type": "application/json"},
+                body: JSON.stringify({ad_id: cardData.id, admin_id: JSON.parse(localStorage.getItem("userInfo")).id}),
+            })
+                .then((res) => {
+                    if (res.status == 204)
+                        navigate(`/admin`)
                 })
         }
     }
@@ -176,6 +198,10 @@ const SelectedCard = () => {
                     {isMyAd() && cardData.status==="archive" &&
                         <button className={"recovery-button-ad"} onClick={showConfirmToRecovery}>
                             <img className={"recoveryImage"} src={recoveryImage}/>
+                        </button>}
+                    {isAdmin() &&
+                        <button className={"recovery-button-ad"} onClick={showConfirmToDelete}>
+                            <img className={"recoveryImage"} src={deleteImage}/>
                         </button>}
                 </div>
                 <div className="image-container">

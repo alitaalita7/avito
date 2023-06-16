@@ -1,10 +1,11 @@
-import React from "react";
+import React, {useState} from "react";
 import {json, Link, useNavigate} from "react-router-dom";
 import "./LogIn.css"
 
 const LogIn =({setIsLogIn})=>{
 
     const navigate = useNavigate();
+    const [authError, setAuthError] = useState(false);
     const isSign=(event)=>{
         event.preventDefault();
         const phone = event.target.elements.phone.value
@@ -23,9 +24,14 @@ const LogIn =({setIsLogIn})=>{
                 }
             })
             .then(res => {
-                localStorage.setItem("userInfo", JSON.stringify(res));
-                setIsLogIn(true);
-                navigate("/")
+                if(res.is_blocked){
+                    setAuthError(true);
+                }
+                else{
+                    localStorage.setItem("userInfo", JSON.stringify(res));
+                    setIsLogIn(true);
+                    navigate("/")
+                }
             })
             .catch(error => {
                 document.querySelector(".error").style.display = "flex";
@@ -35,7 +41,7 @@ const LogIn =({setIsLogIn})=>{
 
 
     return(
-        <div className={"auto-container"}>
+        <div className={"content auto-container"}>
             <h1 className={"login-page-name"}>Вход</h1>
             <form onSubmit={isSign}>
                 <div className={"input-block"}>
@@ -48,6 +54,9 @@ const LogIn =({setIsLogIn})=>{
                 </div>
                 <button type="submit" className={"auto-button"}>Войти</button>
             </form>
+            {authError &&
+                <p className={"auth-error"}>Профиль не найден</p>
+            }
             <p className={"error"}>Неправильный телефон или пароль</p>
             <Link to={'/signup'} className={"auto-link"}>Зарегистрироваться</Link>
         </div>

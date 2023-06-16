@@ -1,0 +1,13 @@
+footer{
+    justify-content: center;
+    display: flex;
+}
+footer p{
+    font-style: italic;
+    padding: 0;
+    margin: 25px 10px;
+}
+.contact{
+    margin-left: 20px;
+    color: #01aafe;
+}

@@ -3,7 +3,7 @@ import UserInfo from "../UserInfo/UserInfo";
 import {useNavigate, useParams} from "react-router-dom";
 import "./AdReview.css"
 
-const AdReview = () => {
+const AdReview = ({setIsLogIn}) => {
 
     const {id} = useParams()
     const navigate = useNavigate()
@@ -29,7 +29,7 @@ const AdReview = () => {
         fetch("http://localhost:8080/get-advertisements-by-user-id-active", {
             method: "POST",
             headers: {'Content-Type': 'application/json'},
-            body: JSON.stringify({user_id: id})
+            body: JSON.stringify({my_id: JSON.parse(localStorage.getItem("userInfo")).id ,user_id: id})
         })
             .then(res => res.json())
             .then(res => setAdsActive(res))
@@ -56,7 +56,7 @@ const AdReview = () => {
 
     return (
         <>
-            <UserInfo/>
+            <UserInfo setIsLogIn={setIsLogIn}/>
             <div className={"container"}>
                 <div className={"page-name"}>
                     <h1>Новый отзыв</h1>

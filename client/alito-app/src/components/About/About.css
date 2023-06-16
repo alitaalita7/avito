@@ -1,0 +1,31 @@
+.about-container{
+    margin: 0 80px;
+}
+.title-about{
+    text-align: center;
+}
+.welcome-about{
+    color: #01aafe;
+}
+.advantage-about h4{
+    color: #01aafe;
+    font-style: italic;
+}
+.advantage-about li {
+    font-style: italic;
+}
+.advantage-about li span{
+    font-weight: bold;
+}
+.description-about{
+    border: 0.5px solid #2cb2f5;
+    padding: 15px;
+}
+.end-about{
+    text-align: center;
+    color: #01aafe;
+}
+.contact-text{
+    text-align: center;
+    font-style: italic;
+}

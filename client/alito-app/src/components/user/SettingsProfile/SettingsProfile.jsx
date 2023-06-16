@@ -5,7 +5,7 @@ import myImage from "../../../image/set.png"
 import Card from "../../Cards/Card/Card";
 import {useNavigate, useParams} from "react-router-dom";
 
-const SettingsProfile = () => {
+const SettingsProfile = ({setIsLogIn}) => {
 
     const {id} = useParams();
     const navigate = useNavigate()
@@ -34,7 +34,7 @@ const SettingsProfile = () => {
 
     const updateUserInfo = async (info) => {
 
-        const response = await fetch(`http://localhost:8080/user/${id}`, {
+        const response = await fetch(`http://localhost:8080/edit-user/${id}`, {
             method: 'PUT',
             headers: {"Content-Type": "application/json"},
             body: JSON.stringify(info)
@@ -69,7 +69,7 @@ const SettingsProfile = () => {
 
     return (
         <>
-            <UserInfo/>
+            <UserInfo setIsLogIn={setIsLogIn}/>
             <form onSubmit={handleUpdateUserInfo} className={"set-profile-container"}>
                 <div className={"set-page-name"}>
                     <h1>Настройки профиля</h1>
@@ -104,7 +104,6 @@ const SettingsProfile = () => {
                     </div>
                 </div>
                 <button type={"submit"} className={"button-confirm"}>Сохранить изменения</button>
-                <button className={"remove-profile"}>Удалить профиль</button>
             </form>
         </>
     )

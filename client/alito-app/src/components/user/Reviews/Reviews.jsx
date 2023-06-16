@@ -3,8 +3,9 @@ import UserInfo from "../UserInfo/UserInfo";
 import "./Reviews.css"
 import Card from "../../Cards/Card/Card";
 import {useNavigate, useParams} from "react-router-dom";
+import deleteImage from "../../../image/delete.svg";
 
-const Reviews = () => {
+const Reviews = ({setIsLogIn}) => {
 
     const {id} = useParams();
 
@@ -50,9 +51,31 @@ const Reviews = () => {
         navigate("/profile/" + id + '/ads')
     }
 
+    const isAdmin = () => {
+        const admin = JSON.parse(localStorage.getItem("userInfo")).is_admin
+        if (admin) {
+            return true
+        } else return false
+    }
+
+    const showConfirmToDelete = (id) => {
+        const con = window.confirm("Удалить отзыв с id = " + (id) + "?")
+        if (con) {
+            fetch(`http://localhost:8080/admin/delete-review`, {
+                method: "POST",
+                headers: {"Content-Type": "application/json"},
+                body: JSON.stringify({review_id: id, admin_id: JSON.parse(localStorage.getItem("userInfo")).id}),
+            })
+                .then((res) => {
+                    if (res.status == 204)
+                        navigate(`/admin`)
+                })
+        }
+    }
+
     return (
         <>
-            <UserInfo />
+            <UserInfo setIsLogIn={setIsLogIn}/>
             <div className={"container"}>
                 <div className={"title-page"}>
                     <h1>Отзывы</h1>
@@ -72,13 +95,16 @@ const Reviews = () => {
                 <div className={"reviews-container"}>
                     {pageSections.find((sec) => sec.key === section)?.reviews.map((review) => (
                         <div className={"review-container"}>
-                            <div className={"from"}
-                                 onClick={()=>{
-                                     if(section==="received")
+                            <div className={"from"}>
+                                <h4 onClick={()=>{
+                                    if(section==="received")
                                         handleNavigateProfile(review.from_user)
-                                     else handleNavigateProfile(review.to_user)
-                                 }}>
-                                <h4>{review.name} {review.surname}</h4>
+                                    else handleNavigateProfile(review.to_user)
+                                }}>{review.name} {review.surname}</h4>
+                                {isAdmin() &&
+                                    <button className={"recovery-button-ad"} onClick={()=>showConfirmToDelete(review.id)}>
+                                        <img className={"recoveryImage"} src={deleteImage}/>
+                                    </button>}
                             </div>
                             <div className={"date"}>
                                 <p>{review.date_posted}</p>

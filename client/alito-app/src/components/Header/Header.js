@@ -9,7 +9,7 @@ function Header({isLoggedIn, setIsLogIn}) {
     const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
     const navigate = useNavigate();
     const handleNavigateNewItem = () => {
-        navigate("/new-addvertisements")
+        navigate("/new-advertisements")
     }
     const handleNavigateLogIn = () => {
         navigate("/login")

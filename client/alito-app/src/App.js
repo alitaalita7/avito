@@ -15,6 +15,9 @@ import AdReview from "./components/user/AddReview/AdReview";
 import ProtectRouter from "./hoc/ProtectRouter";
 import 'react-toastify/dist/ReactToastify.css';
 import Admin from "./components/Admin/Admin";
+import Footer from "./components/Footer/Footer";
+import "./App.css"
+import About from "./components/About/About";
 
 function App() {
 
@@ -29,7 +32,7 @@ function App() {
                        element={<ProtectRouter isLogin={isLogIn}>
                                     <Main/>
                                 </ProtectRouter>}/>
-                <Route path='/new-addvertisements'
+                <Route path='/new-advertisements'
                        element={<ProtectRouter isLogin={isLogIn}>
                                      <NewAd/>
                                 </ProtectRouter>}/>
@@ -37,21 +40,17 @@ function App() {
                        element={<ProtectRouter isLogin={isLogIn}>
                                     <SelectedCard/>
                                 </ProtectRouter>}/>
-                <Route path='/my-ads'
-                       element={<ProtectRouter isLogin={isLogIn}>
-                                    <UserAdvertisements/>
-                                 </ProtectRouter>}/>
                 <Route path={'/profile/:id/reviews'}
                        element={<ProtectRouter isLogin={isLogIn}>
-                                    <Reviews/>
+                                    <Reviews setIsLogIn={setIsLogIn}/>
                                 </ProtectRouter>}/>
                 <Route path={'/profile/:id/favorites'}
                        element={<ProtectRouter isLogin={isLogIn}>
-                                    <Favorites/>
+                                    <Favorites setIsLogIn={setIsLogIn}/>
                                 </ProtectRouter>}/>
                 <Route path={'/profile/:id/settings'}
                        element={<ProtectRouter isLogin={isLogIn}>
-                                    <SettingsProfile/>
+                                    <SettingsProfile setIsLogIn={setIsLogIn}/>
                                 </ProtectRouter>}/>
                 <Route path={'/login'}
                        element={<LogIn setIsLogIn={setIsLogIn}/>}/>
@@ -63,13 +62,20 @@ function App() {
                        element={<ProtectRouter isLogin={isLogIn}><UserAdvertisements/></ProtectRouter>}/>
                 <Route path={'/profile/:id/add-review'}
                        element={<ProtectRouter isLogin={isLogIn}>
-                                    <AdReview/>
+                                    <AdReview setIsLogIn={setIsLogIn}/>
                                 </ProtectRouter>}/>
                 <Route path={'/admin'}
                        element={<ProtectRouter isLogin={userInfo.is_admin} path={"/"}>
                                     <Admin/>
                                 </ProtectRouter>}/>
+                <Route path={'/about'}
+                       element={<ProtectRouter isLogin={isLogIn}>
+                                    <About/>
+                                </ProtectRouter>}/>
             </Routes>
+            {!isLogIn &&
+                <Footer/>
+            }
         </div>
     );
 }

@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useState} from "react";
 import {Link, useNavigate} from "react-router-dom";
 import "./SignUp.css"
 
@@ -11,6 +11,7 @@ const SignUp = ({setIsLogIn}) => {
         const surname = event.target.elements.surname.value
         const phone = event.target.elements.phone.value
         const password = event.target.elements.password.value
+
 
         fetch("http://localhost:8080/addUser", {
             method: "POST",
@@ -25,7 +26,6 @@ const SignUp = ({setIsLogIn}) => {
                 }
             })
             .then(res => {
-                console.log(res)
                 localStorage.setItem("userInfo", JSON.stringify(res));
                 setIsLogIn(true);
                 navigate("/")
@@ -37,7 +37,7 @@ const SignUp = ({setIsLogIn}) => {
     }
 
     return (
-        <div className={"auto-container"}>
+        <div className={"content auto-container"}>
             <h1 className={"auto-page-name"}>Регистрация</h1>
             <form onSubmit={addUser}>
                 <div className={"input-block"}>
@@ -58,7 +58,7 @@ const SignUp = ({setIsLogIn}) => {
                 </div>
                 <button type="submit" className={"auto-button"}>Зарегистрироваться</button>
             </form>
-            <p className={"error"}>Пользователь с таким номером телефона уже существует</p>
+            <p className={"error"}>Пользователь с таким номером телефона уже существует. Для восстановление обратитесь по контактам ниже.</p>
             <Link to={'/login'} className={"auto-link"}>Уже есть аккаунт? Войдите</Link>
         </div>
 

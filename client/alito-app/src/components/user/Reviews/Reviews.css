@@ -29,6 +29,11 @@
 .review-container:last-child{
     border: none;
 }
+.from{
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+}
 .from h4{
     margin-bottom: 0;
     cursor: pointer;

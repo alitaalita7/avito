@@ -4,18 +4,21 @@ import recoveryImage from "../../image/recovery.png";
 const BlockedReviews = ({id, from_user, to_user, advertisement_id, date_posted, setReviews}) => {
 
     const showRecoveryConfirmReviews = (id) => {
-        fetch(`http://localhost:8080/admin/recovery-reviews`,{
-            method: "POST",
-            headers: {"Content-Type": "application/json"},
-            body: JSON.stringify({admin_id: JSON.parse(localStorage.getItem("userInfo")).id, review_id:id}),
-        })
-            .then((res) => {
-                if (res.status == 204){
-                    setReviews(state=>{
-                        return state.filter((el)=>el.id!==id)
-                    })
-                }
+        const con = window.confirm("Восстановить отзыв с id = " + (id) + "?")
+        if (con) {
+            fetch(`http://localhost:8080/admin/recovery-reviews`, {
+                method: "POST",
+                headers: {"Content-Type": "application/json"},
+                body: JSON.stringify({admin_id: JSON.parse(localStorage.getItem("userInfo")).id, review_id: id}),
             })
+                .then((res) => {
+                    if (res.status == 204) {
+                        setReviews(state => {
+                            return state.filter((el) => el.id !== id)
+                        })
+                    }
+                })
+        }
     }
 
     return (

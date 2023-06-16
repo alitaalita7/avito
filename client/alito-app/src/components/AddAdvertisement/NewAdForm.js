@@ -38,7 +38,7 @@ const NewAdForm = ({categories}) => {
             photo,
             "user_id": user_id
         };
-        fetch("http://localhost:8080/advertisement/add", {
+        fetch("http://localhost:8080/add-advertisement", {
             method: "POST",
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(data)

@@ -3,7 +3,7 @@ import UserInfo from "../UserInfo/UserInfo";
 import "./Favorites.css"
 import Card from "../../Cards/Card/Card";
 
-const Favorites=()=>{
+const Favorites=({setIsLogIn})=>{
 
     const [ads, setAds] = useState([]);
 
@@ -21,7 +21,7 @@ const Favorites=()=>{
 
     return(
         <>
-            <UserInfo/>
+            <UserInfo setIsLogIn={setIsLogIn}/>
             <div className={"container"}>
                 <div className={"page-name"}>
                     <h1>Избранное</h1>

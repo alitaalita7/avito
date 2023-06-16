@@ -1,14 +1,16 @@
 import React, {useEffect, useState} from "react";
-import {Link, useLocation, useParams} from "react-router-dom";
+import {Link, useLocation, useNavigate, useParams} from "react-router-dom";
 import "./UserInfo.css"
 import {set} from "react-hook-form";
+import deleteImage from "../../../image/delete.svg";
 
-const UserInfo = () => {
+const UserInfo = ({setIsLogIn}) => {
 
     const {id} = useParams()
     const [reviewInfo, setReviewInfo] = useState({});
     const [user, setUser] = useState({});
     const [firstLetter, setFirstLetter] = useState(' ')
+    const navigate = useNavigate();
 
     useEffect(() => {
 
@@ -34,6 +36,44 @@ const UserInfo = () => {
 
     const {pathname} = useLocation()
     const styleActiveLink = {color: "black", fontWeight: "bold"};
+
+    const isAdmin = () => {
+        const admin = JSON.parse(localStorage.getItem("userInfo")).is_admin
+        if (admin) {
+            return true
+        } else return false
+    }
+
+    const showConfirmToDelete = (id) => {
+        if(id === JSON.parse(localStorage.getItem("userInfo")).id){
+            const con = window.confirm("Вы действительно хотите удалить свой профиль?")
+            if (con) {
+                fetch(`http://localhost:8080/delete-user`, {
+                    method: "POST",
+                    headers: {"Content-Type": "application/json"},
+                    body: JSON.stringify({user_id: id}),
+                })
+                    .then((res) => {
+                        if (res.status == 204)
+                            localStorage.removeItem("userInfo");
+                            setIsLogIn(false)
+                            navigate(`/logIn`)
+                    })
+            }
+        }
+        else {const con = window.confirm("Удалить пользователя с id = " + (id) + "?")
+            if (con) {
+                fetch(`http://localhost:8080/admin/delete-user`, {
+                    method: "POST",
+                    headers: {"Content-Type": "application/json"},
+                    body: JSON.stringify({user_id: id, admin_id: JSON.parse(localStorage.getItem("userInfo")).id}),
+                })
+                    .then((res) => {
+                        if (res.status == 204)
+                            navigate(`/admin`)
+                    })
+            }}
+    }
 
     return (
         <div className={"user-info"}>
@@ -66,6 +106,11 @@ const UserInfo = () => {
                           style={pathname === "/profile/" + user?.id + "/add-review" ? styleActiveLink : {}}>Оставить
                         отзыв</Link>
                 }
+                {(isAdmin() || JSON.parse(localStorage.getItem('userInfo')).id === user?.id) &&
+                    <button className={"remove-profile"}
+                            onClick={()=>showConfirmToDelete(user.id)}>
+                        Удалить профиль
+                    </button>}
             </div>
         </div>
     )

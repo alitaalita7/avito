@@ -21,6 +21,13 @@ function UserMenu({setIsLogIn, onClose}) {
     setIsLogIn(false)
   }
 
+  const isAdmin = () => {
+    const admin = JSON.parse(localStorage.getItem("userInfo")).is_admin
+    if (admin) {
+      return true
+    } else return false
+  }
+
   return (
     <div className="user-menu">
       <ul>
@@ -44,11 +51,14 @@ function UserMenu({setIsLogIn, onClose}) {
         <li>
           <Link to="/login" onClick={()=>{onClose(); logOut()} } >Выход</Link>
         </li>
-        {JSON.parse(localStorage.getItem("userInfo")).is_admin === true &&
+        {isAdmin() &&
             <li>
               <Link to="/admin" onClick={onClose} >Админ-панель</Link>
             </li>
         }
+        <li>
+          <Link to="/about" onClick={onClose}>О нас</Link>
+        </li>
       </ul>
     </div>
   );

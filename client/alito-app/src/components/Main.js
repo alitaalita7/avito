@@ -34,7 +34,7 @@ function Main() {
     });
 
     return (
-        <div className="Main">
+        <div className="Main" >
             <SearchBar onSearch={handleSearch}
                        selectedCategory={selectedCategory}
                        setSelectedCategory={setSelectedCategory}
