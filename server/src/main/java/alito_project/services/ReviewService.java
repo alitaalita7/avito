@@ -15,19 +15,25 @@ public class ReviewService {
     @Autowired
     JdbcTemplate jdbcTemplate;
 
+    // получение числовой информации об отзывах пользователя по id его объявления
+    // с переиспользованиям метода подсчета
     public Map<String, Double> getReviewByAdId(int ad_id) {
-
-        String sql = "SELECT user_id FROM advertisements WHERE id= ? LIMIT 1";
+        String sql = "SELECT user_id FROM advertisements WHERE id= ? ";
         int user_id = jdbcTemplate.queryForObject(sql, Integer.class, ad_id);
-
         return getReviewByUserId(user_id);
     }
 
+    // вычисление количества отзывов и их среднего значения по id пользователя
+    // с проверкой на то что отзыв не удален и его владелец не удален
     public Map<String, Double> getReviewByUserId(int user_id) {
-        String sql = "SELECT COUNT(*) FROM reviews WHERE to_user = ? ";
+        String sql = "SELECT COUNT(*) FROM reviews\n" +
+                "join users on reviews.from_user = users.id\n" +
+                "WHERE to_user = ? and is_deleted = false and users.is_blocked = false";
         Double count = jdbcTemplate.queryForObject(sql, Double.class, user_id);
 
-        sql = "SELECT SUM(rating) FROM reviews WHERE to_user= ? ";
+        sql = "SELECT SUM(rating) FROM reviews\n" +
+                "join users on reviews.from_user = users.id\n" +
+                "WHERE to_user = ? and is_deleted = false and users.is_blocked = false";
         Double sum = jdbcTemplate.queryForObject(sql, Double.class, user_id);
 
         Map<String, Double> map = new HashMap<>();
@@ -46,12 +52,14 @@ public class ReviewService {
         return map;
     }
 
+    // получение информации о полученных отзывах по id пользователя
+    // с проверкой на то что отзыв не был удален
     public List<ReviewDto> getReceivedReviews(int user_id) {
         String sql = "SELECT reviews.id, reviews.from_user, reviews.to_user, reviews.advertisement_id, reviews.rating, reviews.date_posted, reviews.comment, advertisements.title, users.name, users.surname \n" +
                 "FROM reviews \n" +
                 "JOIN advertisements ON reviews.advertisement_id = advertisements.id \n" +
                 "JOIN users ON reviews.from_user = users.id\n" +
-                "WHERE reviews.to_user = ?";
+                "WHERE reviews.to_user = ? and reviews.is_deleted = false";
         return jdbcTemplate.query(sql, (rs, rowNum) -> new ReviewDto(
                 rs.getInt("id"),
                 rs.getInt("from_user"),
@@ -66,12 +74,14 @@ public class ReviewService {
         ), user_id);
     }
 
+    // получение информации об отправленных отзывах по id пользователя
+    // с проверкой на то что отзыв не был удален, и пользователь которому отправляют отзыв не удален
     public List<ReviewDto> getSentReviews(int user_id) {
         String sql = "SELECT reviews.id, reviews.from_user, reviews.to_user, reviews.advertisement_id, reviews.rating, reviews.date_posted, reviews.comment, advertisements.title, users.name, users.surname \n" +
                 "FROM reviews \n" +
                 "JOIN advertisements ON reviews.advertisement_id = advertisements.id \n" +
                 "JOIN users ON reviews.to_user = users.id\n" +
-                "WHERE reviews.from_user = ?";
+                "WHERE reviews.from_user = ? and reviews.is_deleted = false and users.is_blocked = false";
         return jdbcTemplate.query(sql, (rs, rowNum) -> new ReviewDto(
                 rs.getInt("id"),
                 rs.getInt("from_user"),
@@ -86,6 +96,7 @@ public class ReviewService {
         ), user_id);
     }
 
+    // добавление нового отзывы по данным полученным с фронта
     public void addReview(ReviewDto data) {
         String sql = "INSERT INTO reviews " +
                 "(from_user, to_user, advertisement_id, rating, date_posted, comment) " +

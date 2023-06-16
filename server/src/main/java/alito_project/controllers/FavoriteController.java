@@ -16,37 +16,7 @@ public class FavoriteController {
     @Autowired
     FavoriteService favoriteService;
 
-    @GetMapping("/get-all-favorites")
-    public ResponseEntity getAllFavorites(){
-        return ResponseEntity.ok().body(favoriteService.getAllFavorites());
-    }
-    @PostMapping("/add-to-favorite")
-    public ResponseEntity<?> addToFavorite(@RequestBody Map<String, Integer> map) {
-        // TODO: добавить валидацию мапы чтобы запрос не падал когда он приходит не с фронта\
-        FavoriteDto data = new FavoriteDto(
-                map.get("user_id"),
-                map.get("ad_id")
-        );
-        favoriteService.addToFavorite(data);
-        return ResponseEntity.ok().build();
-    }
-
-    @PostMapping("/get-favorites-by-id")
-    public ResponseEntity getFavoritesById(@RequestBody Map<String, Integer> map){
-        if(map.containsKey("user_id")){
-            return ResponseEntity.ok().body(favoriteService.getFavoritesById(map.get("user_id")));
-        }
-        else return ResponseEntity.badRequest().body("IllegalArgumentException");
-    }
-
-    @PostMapping("/delete-from-favorites")
-    public ResponseEntity deleteFromFavorites(@RequestBody Map<String, Integer> map){
-        if(map.containsKey("user_id") && map.containsKey("ad_id")){
-            return ResponseEntity.ok().body(favoriteService.deleteFromFavorites(map.get("user_id"), map.get("ad_id")));
-        }
-        else return ResponseEntity.badRequest().body("IllegalArgumentException");
-    }
-
+    //проверка на наличие избранного по id пользователя и id объявления
     @PostMapping("/is-favorite-exist")
     public ResponseEntity isFavoriteExist(@RequestBody Map<String, Integer> map){
         if(map.containsKey("user_id") && map.containsKey("ad_id")){
@@ -59,6 +29,31 @@ public class FavoriteController {
         else return ResponseEntity.badRequest().body("IllegalArgumentException");
     }
 
+    // добавление объявления в избранное по полученным данным с фронта
+    // при проверке уже существуещей записи
+    @PostMapping("/add-to-favorite")
+    public ResponseEntity<?> addToFavorite(@RequestBody Map<String, Integer> map) {
+        if(!map.containsKey("user_id") || !map.containsKey("ad_id")){
+            return ResponseEntity.badRequest().body("IllegalArgumentException");
+        }
+        FavoriteDto data = new FavoriteDto(
+                map.get("user_id"),
+                map.get("ad_id")
+        );
+        favoriteService.addToFavorite(data);
+        return ResponseEntity.ok().build();
+    }
+
+    // удаление избранног
+    @PostMapping("/delete-from-favorites")
+    public ResponseEntity deleteFromFavorites(@RequestBody Map<String, Integer> map){
+        if(map.containsKey("user_id") && map.containsKey("ad_id")){
+            return ResponseEntity.ok().body(favoriteService.deleteFromFavorites(map.get("user_id"), map.get("ad_id")));
+        }
+        else return ResponseEntity.badRequest().body("IllegalArgumentException");
+    }
+
+    // подсчет количества добавлений опредленного объявления в избранное
     @PostMapping("/get-count-favorites-by-ad")
     public ResponseEntity getCountFavorites(@RequestBody Map<String, Integer> map){
         if (!map.containsKey("ad_id")){

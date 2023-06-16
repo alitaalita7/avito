@@ -19,6 +19,7 @@ public class UserController {
     @Autowired
     UserService userService;
 
+    // авторизация пользователя при совпадении номера и пароля
     @PostMapping("/auth")
     public ResponseEntity auth(@RequestBody Map<String, String> map){
         if(!map.containsKey("phone") || !map.containsKey("password"))
@@ -30,6 +31,9 @@ public class UserController {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
+
+    // регистрация пользователя по полученным данным с фронта
+    // с проверкой по номеру
     @PostMapping("/addUser")
     public ResponseEntity addUser(@RequestBody Map<String, String> map) {
         if (!map.containsKey("name") || !map.containsKey("surname") || !map.containsKey("phone") || !map.containsKey("password"))
@@ -38,10 +42,11 @@ public class UserController {
             UserDto user = new UserDto(map.get("name"), map.get("surname"), map.get("phone"), map.get("password"));
             return ResponseEntity.ok().body(userService.addUser(user));
         } catch (UserAlreadyExist e) {
-            return ResponseEntity.badRequest().body(e.getMessage()); // Вернуть исключение UserAlreadyExist
+            return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
 
+    // получение информации о пользователе по id его объявления
     @PostMapping("/get-user-info-by-ad")
     public ResponseEntity getUserInfoByAd (@RequestBody Map<String, Integer> map){
         if (!map.containsKey("id")){
@@ -50,6 +55,7 @@ public class UserController {
         return ResponseEntity.ok().body(userService.getUserInfoByAd(map.get("id")));
     }
 
+    // получение информации о пользователе по его id
     @PostMapping("/get-user-info-by-id")
     public ResponseEntity getUserInfoById (@RequestBody Map<String, Integer> map){
         if (!map.containsKey("user_id")){
@@ -58,19 +64,30 @@ public class UserController {
         return ResponseEntity.ok().body(userService.getUserInfoById(map.get("user_id")));
     }
 
-    @PostMapping("/edit-user")
-    public ResponseEntity editUser(@RequestBody Map<String, String> map){
-        if(!map.containsKey("user_id") || !map.containsKey("column") || !map.containsKey("value")){
-            return ResponseEntity.badRequest().body("IllegalArgumentException");
-        }
-        int user_id = Integer.parseInt(map.get("user_id"));
-        userService.editUser(user_id, map.get("column"), map.get("value"));
-        return ResponseEntity.ok().body("ok");
+    // редактирование профиля пользователя
+    // по полученным данным с фронта путем обновления
+    @PutMapping("/edit-user/{id}")
+    public ResponseEntity editUser_v1(@PathVariable int id, @RequestBody EditUserDto data){
+        return ResponseEntity.ok().body(userService.editUser(id, data));
     }
 
-    @PutMapping("/user/{id}")
-    public ResponseEntity editUser_v1(@PathVariable int id, @RequestBody EditUserDto data){
-        return ResponseEntity.ok().body(userService.editUser_v1(id, data));
+    // удаление профиля путем обновления поля is_blocked
+    @PostMapping("/delete-user")
+    public ResponseEntity deleteUser(@RequestBody Map<String, Integer> map){
+        if(!map.containsKey("user_id")){
+            return ResponseEntity.badRequest().body("IllegalArgumentException");
+        }
+        userService.deleteUser(map.get("user_id"));
+        return ResponseEntity.status(204).build();
+    }
+
+    // проверка на статус блокировки пользователя
+    @PostMapping("/user-is-blocked")
+    public ResponseEntity isBlocked(@RequestBody Map<String, Integer> map){
+        if(!map.containsKey("user_id")){
+            return ResponseEntity.badRequest().body("IllegalArgumentException");
+        }
+        return ResponseEntity.ok().body(userService.isBlocked(map.get("user_id")));
     }
 
 }

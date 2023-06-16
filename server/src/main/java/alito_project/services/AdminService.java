@@ -16,10 +16,16 @@ public class AdminService {
     JdbcTemplate jdbcTemplate;
     @Autowired
     UserService userService;
+
+    // проверка на то является ли пользователь админом
+    // по полученному id пользователя
+    // с переиспользованием метода получения информации о пользователе по его id
     public boolean checkAdmin(int admin_id){
         UserDto user = userService.getUserInfoById(admin_id);
         return user.is_admin;
     }
+
+    // получение информации об удаленных пользователях
     public List<UserDto> getBlockedUsers(){
         String sql = "SELECT * FROM users WHERE is_blocked = true";
         return jdbcTemplate.query(sql, (rs, rowNum) -> new UserDto(
@@ -33,6 +39,7 @@ public class AdminService {
         ));
     }
 
+    // получение информации об удаленных объявлениях
     public List<AdvertisementDto> getBlockedAdvertisements(){
         String sql = "SELECT * FROM advertisements WHERE is_deleted = true";
         return jdbcTemplate.query(sql, (rs, rowNum) -> new AdvertisementDto(
@@ -53,6 +60,7 @@ public class AdminService {
         ));
     }
 
+    // получение информации об удаленных отзывах
     public List<ReviewDto> getBlockedReviews(){
         String sql = "SELECT * FROM reviews WHERE is_deleted = true";
         return jdbcTemplate.query(sql, (rs, rowNum) -> new ReviewDto(
@@ -67,18 +75,45 @@ public class AdminService {
         ));
     }
 
+    // восстановление удаленного пользователя
+    // путем обновления поля is_blocked
     public void recoveryUser(int user_id){
         String sql = "UPDATE users SET is_blocked = false WHERE id = ?";
         jdbcTemplate.update(sql, user_id);
     }
 
+    // восстановление удаленного объявления
+    // путем обновления поля is_deleted
     public void recoveryAdvertisement(int ad_id){
-        String sql = "UPDATE advertisements SET is_deleted = false WHERE id = ?";
+        String sql = "UPDATE advertisements SET is_deleted = false, status = 'active' WHERE id = ?";
         jdbcTemplate.update(sql, ad_id);
     }
 
+    // восстановление удаленного отзыва
+    // путем обновления поля is_deleted
     public void recoveryReview(int review_id){
         String sql = "UPDATE reviews SET is_deleted = false WHERE id = ?";
+        jdbcTemplate.update(sql, review_id);
+    }
+
+    // удаление пользователя
+    // путем обновления поля is_blocked
+    public void deleteUser(int user_id){
+        String sql = "UPDATE users SET is_blocked = true WHERE id = ?";
+        jdbcTemplate.update(sql, user_id);
+    }
+
+    // удаление объявления
+    // путем обновления поля is_deleted
+    public void deleteAdvertisement(int ad_id){
+        String sql = "UPDATE advertisements SET is_deleted = true WHERE id = ?";
+        jdbcTemplate.update(sql, ad_id);
+    }
+
+    // удаление отзыва
+    // путем обновления поля is_deleted
+    public void deleteReview(int review_id){
+        String sql = "UPDATE reviews SET is_deleted = true WHERE id = ?";
         jdbcTemplate.update(sql, review_id);
     }
 }

@@ -20,6 +20,8 @@ public class ReviewController {
     @Autowired
     ReviewService reviewService;
 
+    // получение числовой информации об отзывах пользователя по id его объявления
+    // с переиспользованиям метода подсчета
     @PostMapping("/get-review-info-by-ad")
     public ResponseEntity getReviewByAdId(@RequestBody Map<String, Integer> map){
         if(!map.containsKey("id")){
@@ -28,6 +30,9 @@ public class ReviewController {
         Map<String, Double> map2 = reviewService.getReviewByAdId(map.get("id"));
         return ResponseEntity.ok().body(map2);
     }
+
+    // вычисление количества отзывов и их среднего значения по id пользователя
+    // с проверкой на то что отзыв не удален и его владелец не удален
     @PostMapping("/get-review-info-by-user")
     public ResponseEntity getReviewByUserId(@RequestBody Map<String, Integer> map){
         if(!map.containsKey("id")){
@@ -37,6 +42,8 @@ public class ReviewController {
         return ResponseEntity.ok().body(map2);
     }
 
+    // получение информации о полученных отзывах по id пользователя
+    // с проверкой на то что отзыв не был удален
     @PostMapping("/get-received-reviews")
     public ResponseEntity getReceivedReviews(@RequestBody Map<String, Integer> map){
         if(map.containsKey("id")){
@@ -45,6 +52,8 @@ public class ReviewController {
         else return ResponseEntity.badRequest().body("IllegalArgumentException");
     }
 
+    // получение информации об отправленных отзывах по id пользователя
+    // с проверкой на то что отзыв не был удален, и пользователь которому отправляют отзыв не удален
     @PostMapping("/get-sent-reviews")
     public ResponseEntity getSentReviews(@RequestBody Map<String, Integer> map){
         if(map.containsKey("id")){
@@ -53,6 +62,7 @@ public class ReviewController {
         else return ResponseEntity.badRequest().body("IllegalArgumentException");
     }
 
+    // добавление нового отзывы по данным полученным с фронта
     @PostMapping("/add-review")
     public ResponseEntity<?> addReview(@RequestBody Map<String, String> map) {
         // TODO: добавить валидацию мапы чтобы запрос не падал когда он приходит не с фронта
