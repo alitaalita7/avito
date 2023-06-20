@@ -12,6 +12,7 @@ public class EditAdvertisementDTO {
     public String house;
     public String photo;
 
+
     public EditAdvertisementDTO(String title, String description, int price, String category, String city, String district, String street, String house, String photo) {
         this.title = title;
         this.description = description;

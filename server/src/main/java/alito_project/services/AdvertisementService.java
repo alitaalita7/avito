@@ -3,17 +3,22 @@ package alito_project.services;
 import alito_project.dto.AdIsLike;
 import alito_project.dto.AdvertisementDto;
 import alito_project.dto.EditAdvertisementDTO;
+import alito_project.dto.KeywordsDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Service
 public class AdvertisementService {
     @Autowired
     JdbcTemplate jdbcTemplate;
+    @Autowired
+    KeywordsService keywordsService;
 
     // получение всех объявлений на главную страницу
     // с проверкой на избранное для авторизованного пользователя
@@ -173,6 +178,7 @@ public class AdvertisementService {
 
         return getAdvertisementById(ad_id);
     }
+
 
     // архивирование объяления путем обновления статуса
     public void deleteAdvertisementArchive(int ad_id){

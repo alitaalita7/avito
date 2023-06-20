@@ -44,7 +44,7 @@ public class FavoriteController {
         return ResponseEntity.ok().build();
     }
 
-    // удаление избранног
+    // удаление избранного
     @PostMapping("/delete-from-favorites")
     public ResponseEntity deleteFromFavorites(@RequestBody Map<String, Integer> map){
         if(map.containsKey("user_id") && map.containsKey("ad_id")){
