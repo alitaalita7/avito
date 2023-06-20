@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from "react";
-import EditImg from "../../../image/edit.svg"
 import {useNavigate, useParams} from "react-router-dom";
 import './EditCard.css'
+import Autocomplete from "../../Autocomplete/Autocomplete";
 
 const EditCard = () => {
     const categories = [
@@ -56,6 +56,8 @@ const EditCard = () => {
     const [photoValue, setPhotoValue] = useState('');
     const [descriptionValue, setDescriptionValue] = useState('');
 
+    const [selectedKeywords, setSelectedKeywords] = useState([]);
+
     const getCardData = () => {
         fetch("http://localhost:8080/get-advertisement-by-id", {
             method: "POST",
@@ -75,6 +77,13 @@ const EditCard = () => {
                 setPhotoValue(res.photo)
                 setDescriptionValue(res.description)
             })
+        fetch("http://localhost:8080/get-keywords-by-ad-id",{
+            method: "POST",
+            headers: {'content-type': "application/json"},
+            body: JSON.stringify({id: id})
+        })
+            .then(res=>res.json())
+            .then(res=>setSelectedKeywords(res))
     }
 
     const updateCardData = async (data) => {
@@ -101,8 +110,17 @@ const EditCard = () => {
                 data[field_name] = item.placeholder
             }
         })
-
         await updateCardData(data)
+        fetch(`http://localhost:8080/add-keys/${id}`,{
+            method: "POST",
+            headers: {'content-type': "application/json"},
+            body: JSON.stringify({selectedKeywords})
+        })
+        fetch(`http://localhost:8080/remove-keys/${id}`,{
+            method: "POST",
+            headers: {'content-type': "application/json"},
+            body: JSON.stringify({selectedKeywords})
+        })
         navigate(`/ad/${id}`)
     }
 
@@ -111,94 +129,105 @@ const EditCard = () => {
     }, [])
 
     return (
-        <form onSubmit={handleUpdateCardData} className={"edit-container"}>
+        <>
             <h1 className="title-edit-card">Редактирование объявления</h1>
-            <div className="edit">
-                <p>Название:</p>
-                <input className="set-input"
-                       type="text"
-                       name={"title"}
-                       value={titleValue}
-                       onChange={(event) => setTitleValue(event.target.value)}
-                />
-            </div>
-            <div className="edit">
-                <p>Категория:</p>
-                <select className="set-input"
-                        name={"category"}
-                        value={categoryValue}
-                        onChange={(event) => setCategoryValue(event.target.value)}>
-                    {/*<option>{categoryValue}</option>*/}
-                    {categories.map((category) => (
-                        <option key={category.id}>{category.title}</option>
-                    ))}
-                </select>
-            </div>
-            <div className="edit">
-                <p>Цена:</p>
-                <input className="set-input"
-                       type="text"
-                       name={"price"}
-                       value={priceValue}
-                       onChange={(event) => setPriceValue(event.target.value)}
-                />
-            </div>
-            <div className="edit">
-                <p>Город:</p>
-                <input className="set-input"
-                       type="text"
-                       name={"city"}
-                       value={cityValue}
-                       onChange={(event) => setCityValue(event.target.value)}
-                />
-            </div>
-            <div className="edit">
-                <p>Район:</p>
-                <input className="set-input"
-                       type="text"
-                       name={"district"}
-                       value={districtValue}
-                       onChange={(event) => setDistrictValue(event.target.value)}
-                />
-            </div>
-            <div className="edit">
-                <p>Улица:</p>
-                <input className="set-input"
-                       type="text"
-                       name={"street"}
-                       value={streetValue}
-                       onChange={(event) => setStreetValue(event.target.value)}
-                />
-            </div>
-            <div className="edit">
-                <p>Дом:</p>
-                <input className="set-input"
-                       type="text"
-                       name={"house"}
-                       value={houseValue}
-                       onChange={(event) => setHouseValue(event.target.value)}
-                />
-            </div>
-            <div className="edit">
-                <p>Фото:</p>
-                <input className="set-input"
-                       type="text"
-                       name={"photo"}
-                       value={photoValue}
-                       onChange={(event) => setPhotoValue(event.target.value)}
-                />
-            </div>
-            <div className="edit">
-                <p>Описание:</p>
-                <input className="set-input"
-                       type="text"
-                       name={"description"}
-                       value={descriptionValue}
-                       onChange={(event) => setDescriptionValue(event.target.value)}
-                />
-            </div>
-            <button type={"submit"} className={"button-confirm"}>Сохранить изменения</button>
-        </form>
+            <form onSubmit={handleUpdateCardData} className={"edit-container"}>
+                <div className={"edit-block"}>
+                    <div className="edit">
+                        <p>Название:</p>
+                        <input className="set-input"
+                               type="text"
+                               name={"title"}
+                               value={titleValue}
+                               onChange={(event) => setTitleValue(event.target.value)}
+                        />
+                    </div>
+                    <div className="edit">
+                        <p>Категория:</p>
+                        <select className="set-input"
+                                name={"category"}
+                                value={categoryValue}
+                                onChange={(event) => setCategoryValue(event.target.value)}>
+                            {categories.map((category) => (
+                                <option key={category.id}>{category.title}</option>
+                            ))}
+                        </select>
+                    </div>
+                    <div className="edit">
+                        <p>Цена:</p>
+                        <input className="set-input"
+                               type="text"
+                               name={"price"}
+                               value={priceValue}
+                               onChange={(event) => setPriceValue(event.target.value)}
+                        />
+                    </div>
+                </div>
+                <div className={"edit-block"}>
+                    <div className="edit">
+                        <p>Город:</p>
+                        <input className="set-input"
+                               type="text"
+                               name={"city"}
+                               value={cityValue}
+                               onChange={(event) => setCityValue(event.target.value)}
+                        />
+                    </div>
+                    <div className="edit">
+                        <p>Район:</p>
+                        <input className="set-input"
+                               type="text"
+                               name={"district"}
+                               value={districtValue}
+                               onChange={(event) => setDistrictValue(event.target.value)}
+                        />
+                    </div>
+                    <div className="edit">
+                        <p>Улица:</p>
+                        <input className="set-input"
+                               type="text"
+                               name={"street"}
+                               value={streetValue}
+                               onChange={(event) => setStreetValue(event.target.value)}
+                        />
+                    </div>
+                    <div className="edit">
+                        <p>Дом:</p>
+                        <input className="set-input"
+                               type="text"
+                               name={"house"}
+                               value={houseValue}
+                               onChange={(event) => setHouseValue(event.target.value)}
+                        />
+                    </div>
+                </div>
+                <div className={"edit-block"}>
+                    <div className="edit">
+                        <p>Фото:</p>
+                        <input className="set-input"
+                               type="text"
+                               name={"photo"}
+                               value={photoValue}
+                               onChange={(event) => setPhotoValue(event.target.value)}
+                        />
+                    </div>
+                    <div className="edit">
+                        <p>Описание:</p>
+                        <input className="set-input"
+                               type="text"
+                               name={"description"}
+                               value={descriptionValue}
+                               onChange={(event) => setDescriptionValue(event.target.value)}
+                        />
+                    </div>
+                    <div className="edit">
+                        <p>Ключевые слова:</p>
+                        <Autocomplete ad_id = {id} selectedKeywords={selectedKeywords} setSelectedKeywords={setSelectedKeywords}/>
+                    </div>
+                </div>
+                <button type={"submit"} className={"button-confirm"}>Сохранить изменения</button>
+            </form>
+        </>
     );
 };
 

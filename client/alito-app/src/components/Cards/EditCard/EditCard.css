@@ -1,7 +1,15 @@
+.title-edit-card{
+    text-align: center;
+}
 .edit-container{
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
+    flex-wrap: wrap;
     align-items: center;
+    justify-content: center;
+}
+.edit-block{
+    width: 30%;
 }
 .edit{
     display: grid;

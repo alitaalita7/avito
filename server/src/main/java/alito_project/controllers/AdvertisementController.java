@@ -3,6 +3,7 @@ package alito_project.controllers;
 import alito_project.dto.AdIsLike;
 import alito_project.dto.AdvertisementDto;
 import alito_project.dto.EditAdvertisementDTO;
+import alito_project.dto.KeywordsDto;
 import alito_project.services.AdvertisementService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -43,10 +44,12 @@ public class AdvertisementController {
     // добавление нового объявления на основе полученных данных с фронта
     @PostMapping("/add-advertisement")
     public ResponseEntity<?> addAdvertisement(@RequestBody Map<String, String> map) {
-        if(!map.containsKey("title") || !map.containsKey("description") || !map.containsKey("prise")
+        System.out.println(map);
+        if(!map.containsKey("title") || !map.containsKey("description") || !map.containsKey("price")
                 || !map.containsKey("category") || !map.containsKey("city") || !map.containsKey("district")
                 || !map.containsKey("street") || !map.containsKey("house") || !map.containsKey("photo")
                 || !map.containsKey("user_id")){
+            System.out.println(map);
             return ResponseEntity.badRequest().body("Получены не все поля");
         }
         AdvertisementDto data = new AdvertisementDto(
