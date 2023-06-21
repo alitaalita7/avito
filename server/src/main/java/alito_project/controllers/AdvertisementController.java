@@ -1,9 +1,6 @@
 package alito_project.controllers;
 
-import alito_project.dto.AdIsLike;
-import alito_project.dto.AdvertisementDto;
-import alito_project.dto.EditAdvertisementDTO;
-import alito_project.dto.KeywordsDto;
+import alito_project.dto.*;
 import alito_project.services.AdvertisementService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -28,7 +25,7 @@ public class AdvertisementController {
         if (!map.containsKey("user_id")) {
             return ResponseEntity.badRequest().body("Отсутсвтует user_id");
         }
-        List<AdIsLike> list = advertisementService.getAllAdvertisements(map.get("user_id"));
+        List<AdRecommend> list = advertisementService.getAllAdvertisements(map.get("user_id"));
         return ResponseEntity.ok().body(list);
     }
 
@@ -42,29 +39,10 @@ public class AdvertisementController {
     }
 
     // добавление нового объявления на основе полученных данных с фронта
+    // создание нового объявления в бд,получение id нового объявления,переиспользование метода добавления ключей
     @PostMapping("/add-advertisement")
-    public ResponseEntity<?> addAdvertisement(@RequestBody Map<String, String> map) {
-        System.out.println(map);
-        if(!map.containsKey("title") || !map.containsKey("description") || !map.containsKey("price")
-                || !map.containsKey("category") || !map.containsKey("city") || !map.containsKey("district")
-                || !map.containsKey("street") || !map.containsKey("house") || !map.containsKey("photo")
-                || !map.containsKey("user_id")){
-            System.out.println(map);
-            return ResponseEntity.badRequest().body("Получены не все поля");
-        }
-        AdvertisementDto data = new AdvertisementDto(
-                map.get("title"),
-                map.get("description"),
-                Integer.parseInt(map.get("price")),
-                map.get("category"),
-                map.get("city"),
-                map.get("district"),
-                map.get("street"),
-                map.get("house"),
-                map.get("photo"),
-                Integer.parseInt(map.get("user_id"))
-        );
-        advertisementService.addAdvertisement(data);
+    public ResponseEntity<?> addAdvertisement(@RequestBody AdAdvertisement data) {
+        advertisementService.addAdvertisement(data, data.keywords);
         return ResponseEntity.ok().build();
     }
 

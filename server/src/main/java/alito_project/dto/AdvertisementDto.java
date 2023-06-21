@@ -15,6 +15,7 @@ public class AdvertisementDto {
     public String photo;
     public int user_id;
     public boolean is_deleted;
+    public KeywordsDto[] keywords;
     public AdvertisementDto(int id, String title, String description, int price, String date_created, String status, String category, String city, String district, String street, String house, String photo, int user_id) {
         this.id = id;
         this.title = title;
@@ -31,7 +32,7 @@ public class AdvertisementDto {
         this.user_id = user_id;
     }
 
-    public AdvertisementDto(String title, String description, int price, String category, String city, String district, String street, String house, String photo, int user_id) {
+    public AdvertisementDto(String title, String description, int price, String category, String city, String district, String street, String house, String photo, int user_id, KeywordsDto[] keywords) {
         this.title = title;
         this.description = description;
         this.price = price;
@@ -42,6 +43,7 @@ public class AdvertisementDto {
         this.house = house;
         this.photo = photo;
         this.user_id = user_id;
+        this.keywords = keywords;
     }
 
     public AdvertisementDto(int id, String title, String description, int price, String date_created, String status, String category, String city, String district, String street, String house, String photo, int user_id, boolean is_deleted) {

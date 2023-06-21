@@ -19,7 +19,8 @@ public class KeywordsService {
 
     // получение всех ключевых слов для селекта
     public List<KeywordsDto> getKeywords() {
-        String sql = "SELECT * FROM keywords";
+        String sql = "SELECT * FROM keywords\n" +
+                "ORDER BY word;";
         List<KeywordsDto> list = new ArrayList<>();
         list = jdbcTemplate.query(sql, (rs, rowNum) -> new KeywordsDto(
                 rs.getInt("id"),
