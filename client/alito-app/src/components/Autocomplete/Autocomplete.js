@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import './Autocomplete.css';
 
-const Autocomplete = ({ad_id, selectedKeywords, setSelectedKeywords}) => {
+const Autocomplete = ({selectedKeywords, setSelectedKeywords}) => {
     const [inputValue, setInputValue] = useState('');
     const [keywords, setKeywords] = useState([]);
 

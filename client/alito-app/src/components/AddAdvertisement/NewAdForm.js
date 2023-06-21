@@ -1,6 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import './NewAdForm.css'
 import {useNavigate} from "react-router-dom";
+import Autocomplete from "../Autocomplete/Autocomplete";
 const NewAdForm = ({categories}) => {
 
     const [title, setTitle] = useState('');
@@ -8,6 +9,8 @@ const NewAdForm = ({categories}) => {
     const [price, setPrice] = useState('');
     const [photo, setPhoto] = useState('');
     const [description, setDescription] = useState('');
+
+    const [selectedKeywords, setSelectedKeywords] = useState([]);
     const handleTitleChange = (event) => {setTitle(event.target.value);};
     const handleCategoryChange = (event) => {setCategory(event.target.value);};
     const handlePriceChange = (event) => {setPrice(event.target.value);};
@@ -36,7 +39,8 @@ const NewAdForm = ({categories}) => {
             street,
             house,
             photo,
-            "user_id": user_id
+            "user_id": user_id,
+            keywords:selectedKeywords
         };
         fetch("http://localhost:8080/add-advertisement", {
             method: "POST",
@@ -91,6 +95,11 @@ const NewAdForm = ({categories}) => {
             <div className={"input-block"}>
                 <label htmlFor="description">Описание:</label>
                 <textarea id="description" value={description} onChange={handleDescriptionChange}/>
+            </div>
+            <div className={"input-block"}>
+                <label htmlFor="keywords">Описание:</label>
+                <Autocomplete selectedKeywords={selectedKeywords} setSelectedKeywords={setSelectedKeywords}/>
+                {/*<textarea id="keywords" value={description} onChange={handleDescriptionChange}/>*/}
             </div>
             <button type="submit">Добавить объявление</button>
         </form>

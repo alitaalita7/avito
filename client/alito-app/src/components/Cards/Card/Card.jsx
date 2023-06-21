@@ -21,6 +21,7 @@ const Card = ({ id, ad, showConfirmToRecovery=()=>{}, showConfirmToDelete=()=>{}
 
     const addToFavorite = (id) => {
         const userId = JSON.parse(localStorage.getItem("userInfo")).id;
+        console.log(id)
         fetch("http://localhost:8080/add-to-favorite", {
             method: "POST",
             headers: {"Content-Type": "application/json"},
