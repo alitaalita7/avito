@@ -22,11 +22,16 @@ public class AdvertisementController {
     // и с учетом рекоммендаций
     @PostMapping("/get-all-advertisements")
     public ResponseEntity getAllAdvertisement(@RequestBody Map<String, Integer> map) {
-        if (!map.containsKey("user_id")) {
-            return ResponseEntity.badRequest().body("Отсутсвтует user_id");
+        if (!map.containsKey("user_id") || !map.containsKey("page") || !map.containsKey("pageSize")) {
+            return ResponseEntity.badRequest().body("Отсутствуют параметры");
         }
-        List<AdRecommend> list = advertisementService.getAllAdvertisements(map.get("user_id"));
+        List<AdRecommend> list = advertisementService.getAllAdvertisements(map.get("user_id"), map.get("page"), map.get("pageSize"));
         return ResponseEntity.ok().body(list);
+    }
+
+    @GetMapping("/get-pages-count")
+    public ResponseEntity getTotalPagesCount(){
+        return ResponseEntity.ok().body(advertisementService.getTotalPagesCount());
     }
 
     // получение информации об объявлении по его id

@@ -8,6 +8,9 @@ public class KeywordsDto {
         this.id = id;
         this.word = word;
     }
+    public KeywordsDto(String word){
+        this.word=word;
+    }
 
     @Override
     public String toString() {

@@ -1,0 +1,16 @@
+.load-container{
+    display: flex;
+    justify-content: center;
+}
+.load-button{
+    width: 8%;
+    margin-bottom: 20px;
+    background-color: white;
+    border-radius: 5%;
+    height: 30px;
+    border: 1px solid #757575;
+    cursor: pointer;
+}
+.load-button:hover{
+    background-color: #cccccc;
+}

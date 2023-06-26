@@ -20,4 +20,32 @@ table {
     padding: 5px;
     text-align: center;
 }
+.edit-keywords-container{
+    display: flex;
+    margin-bottom: 100px;
+    position: relative;
+}
+.edit-keywords-container-button-add{
+    border-radius: 5%;
+    background-color: white;
+    border: 1px solid #757575;
+    cursor: pointer;
+    height: 50px;
+}
+.edit-keywords-container-button-add:hover{
+    background-color: #cccccc;
+}
+.edit-keywords-container-button-remove{
+    border-radius: 20%;
+    background-color: white;
+    border: 1px solid #757575;
+    cursor: pointer;
+    margin-left: 20px;
+    height: 25px;
+    width: 25px;
+    padding: 0;
+}
+.edit-keywords-container-button-remove:hover{
+    background-color: #cccccc;
+}
 

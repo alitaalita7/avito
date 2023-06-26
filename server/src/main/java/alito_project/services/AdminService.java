@@ -1,9 +1,6 @@
 package alito_project.services;
 
-import alito_project.dto.AdUser;
-import alito_project.dto.AdvertisementDto;
-import alito_project.dto.ReviewDto;
-import alito_project.dto.UserDto;
+import alito_project.dto.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
@@ -115,5 +112,21 @@ public class AdminService {
     public void deleteReview(int review_id){
         String sql = "UPDATE reviews SET is_deleted = true WHERE id = ?";
         jdbcTemplate.update(sql, review_id);
+    }
+
+    //добавление нового ключевого слова
+    public void addKeyword(KeywordsDto data){
+        System.out.println(data.word);
+        String sql = "INSERT INTO keywords(word) VALUES (?)";
+        jdbcTemplate.update(sql, data.word);
+    }
+    public void removeKeyword(int keywordId){
+        // Удаление связей в таблице keys
+        String deleteKeysQuery = "DELETE FROM keys WHERE key_id = ?";
+        jdbcTemplate.update(deleteKeysQuery, keywordId);
+
+        // Удаление ключевого слова из таблицы keywords
+        String deleteKeywordQuery = "DELETE FROM keywords WHERE id = ?";
+        jdbcTemplate.update(deleteKeywordQuery, keywordId);
     }
 }

@@ -16,6 +16,7 @@ public class AdRecommend {
     public int    ownerId;
     public int    isLike;
     public int    keywordMatches;
+//    public int countPage;
 
     public AdRecommend(int id, String title, String description, int price, String dateCreated, String status, String category, String city, String district, String street, String house, String photo, int ownerId, int isLike, int keywordMatches) {
         this.id = id;
@@ -33,5 +34,6 @@ public class AdRecommend {
         this.ownerId = ownerId;
         this.isLike = isLike;
         this.keywordMatches = keywordMatches;
+//        this.countPage = countPage;
     }
 }

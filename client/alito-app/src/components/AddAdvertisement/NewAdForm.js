@@ -97,7 +97,7 @@ const NewAdForm = ({categories}) => {
                 <textarea id="description" value={description} onChange={handleDescriptionChange}/>
             </div>
             <div className={"input-block"}>
-                <label htmlFor="keywords">Описание:</label>
+                <label htmlFor="keywords">Ключевые слова:</label>
                 <Autocomplete selectedKeywords={selectedKeywords} setSelectedKeywords={setSelectedKeywords}/>
                 {/*<textarea id="keywords" value={description} onChange={handleDescriptionChange}/>*/}
             </div>

@@ -1,6 +1,9 @@
 package alito_project.controllers;
 
 import alito_project.dto.AdIsLike;
+import alito_project.dto.AdRecommend;
+import alito_project.dto.FavoriteDto;
+import alito_project.dto.KeywordsDto;
 import alito_project.services.AdminService;
 import alito_project.services.AdvertisementService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -143,6 +146,37 @@ public class AdminController {
             return ResponseEntity.status(403).build();
         }
         adminService.deleteReview(map.get("review_id"));
+        return ResponseEntity.status(204).build();
+    }
+
+    // добавление нового ключевого слова
+    @PostMapping("/add-keyword")
+    public ResponseEntity addKeyword(@RequestBody Map<String, String> map){
+        if(!map.containsKey("inputValue")){
+            return ResponseEntity.badRequest().body("IllegalArgumentException");
+        }
+        if(!adminService.checkAdmin(Integer.parseInt(map.get("admin_id")))){
+            return ResponseEntity.status(403).build();
+        }
+        KeywordsDto data = new KeywordsDto(
+                map.get("inputValue")
+        );
+        adminService.addKeyword(data);
+        return ResponseEntity.status(204).build();
+    }
+
+    @PostMapping("/remove-keyword")
+    public ResponseEntity removeKeyword(@RequestBody Map<String, String> map){
+        if(!map.containsKey("keyword_id")){
+            return ResponseEntity.badRequest().body("IllegalArgumentException");
+        }
+        if(!adminService.checkAdmin(Integer.parseInt(map.get("admin_id")))){
+            return ResponseEntity.status(403).build();
+        }
+
+        int keywordId = Integer.parseInt(map.get("keyword_id"));
+        adminService.removeKeyword(keywordId);
+
         return ResponseEntity.status(204).build();
     }
 

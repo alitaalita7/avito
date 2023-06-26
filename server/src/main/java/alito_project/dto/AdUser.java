@@ -10,7 +10,6 @@ public class AdUser {
     public boolean is_blocked;
 
     public AdUser(int id, String name, String surname, String phone, String password, boolean is_admin, boolean is_blocked) {
-        System.out.println(id);
         this.id = id;
         this.name = name;
         this.surname = surname;
@@ -18,7 +17,6 @@ public class AdUser {
         this.password = password;
         this.is_admin = is_admin;
         this.is_blocked = is_blocked;
-        System.out.println(this.id);
     }
 
     @Override
